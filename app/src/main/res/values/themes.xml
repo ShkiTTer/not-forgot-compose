@@ -1,0 +1,7 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.NotForgot" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <item name="android:statusBarColor">#33000000</item>
+        <item name="android:navigationBarColor">#33000000</item>
+    </style>
+</resources>

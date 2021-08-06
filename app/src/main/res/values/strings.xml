@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">NotForgot</string>
+
+    <string name="splash_app_name">Not\nForgot</string>
+
+    <!-- Login -->
+    <string name="login_title">Войти</string>
+</resources>
