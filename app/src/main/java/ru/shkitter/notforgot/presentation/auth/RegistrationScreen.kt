@@ -8,8 +8,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.insets.systemBarsPadding
+import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 import ru.shkitter.notforgot.R
 import ru.shkitter.notforgot.presentation.common.components.AppFilledButton
 import ru.shkitter.notforgot.presentation.common.components.AppOutlinedTextField
@@ -52,10 +54,15 @@ fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
             )
         }
     ) { _ ->
-        val email = remember { mutableStateOf(inputEmail) }
-        val name = remember { mutableStateOf("") }
-        val password = remember { mutableStateOf("") }
-        val repeatPassword = remember { mutableStateOf("") }
+
+        val viewModel = getViewModel<RegistrationViewModel> {
+            parametersOf(inputEmail)
+        }
+
+        val email by viewModel.email.observeAsState("")
+        val name by viewModel.name.observeAsState("")
+        val password by viewModel.password.observeAsState("")
+        val repeatPassword by viewModel.repeatPassword.observeAsState("")
 
         Box(modifier = Modifier.systemBarsPadding()) {
             Column(
@@ -67,8 +74,8 @@ fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
                 Spacer(modifier = Modifier.height(36.dp))
 
                 AppOutlinedTextField(
-                    value = email.value,
-                    onValueChange = { text -> email.value = text },
+                    value = email,
+                    onValueChange = viewModel::onEmailChanged,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(id = R.string.common_email),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email)
@@ -77,8 +84,8 @@ fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 AppOutlinedTextField(
-                    value = name.value,
-                    onValueChange = { text -> name.value = text },
+                    value = name,
+                    onValueChange = viewModel::onNameChanged,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(id = R.string.registration_name)
                 )
@@ -86,8 +93,8 @@ fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 AppOutlinedTextField(
-                    value = password.value,
-                    onValueChange = { text -> password.value = text },
+                    value = password,
+                    onValueChange = viewModel::onPasswordChanged,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(id = R.string.common_password),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
@@ -96,8 +103,8 @@ fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 AppOutlinedTextField(
-                    value = repeatPassword.value,
-                    onValueChange = { text -> repeatPassword.value = text },
+                    value = repeatPassword,
+                    onValueChange = viewModel::onRepeatPasswordChanged,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(id = R.string.registration_repeat_password),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)

@@ -3,13 +3,15 @@ package ru.shkitter.notforgot.presentation.auth
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -24,7 +26,6 @@ import ru.shkitter.notforgot.R
 import ru.shkitter.notforgot.presentation.common.components.AppFilledButton
 import ru.shkitter.notforgot.presentation.common.components.AppOutlinedTextField
 import ru.shkitter.notforgot.presentation.common.theme.AccentBlue
-import ru.shkitter.notforgot.presentation.common.theme.BgBlack
 
 @Preview(showSystemUi = true, showBackground = true, device = Devices.PIXEL_3)
 @Composable
@@ -71,16 +72,17 @@ fun LoginScreen(onRegistrationClick: (String) -> Unit) {
 
                 AppOutlinedTextField(
                     value = email,
-                    onValueChange = { text -> viewModel.onEmailChanged(text) },
+                    onValueChange = viewModel::onEmailChanged,
                     modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(id = R.string.common_email)
+                    label = stringResource(id = R.string.common_email),
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email)
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 AppOutlinedTextField(
                     value = password,
-                    onValueChange = { text -> viewModel.onPasswordChanged(text) },
+                    onValueChange = viewModel::onPasswordChanged,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(id = R.string.common_password),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
