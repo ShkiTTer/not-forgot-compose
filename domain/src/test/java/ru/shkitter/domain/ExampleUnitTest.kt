@@ -1,4 +1,4 @@
-package ru.shitter.domain
+package ru.shkitter.domain
 
 import org.junit.Test
 

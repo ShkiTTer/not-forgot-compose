@@ -1,4 +1,4 @@
-package ru.shitter.data
+package ru.shkitter.data
 
 import org.junit.Test
 

@@ -2,7 +2,7 @@ package ru.shkitter.notforgot.app.koin
 
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
-import ru.shitter.data.net.common.Network
+import ru.shkitter.data.net.common.Network
 import ru.shkitter.notforgot.BuildConfig
 
 object KoinModules {

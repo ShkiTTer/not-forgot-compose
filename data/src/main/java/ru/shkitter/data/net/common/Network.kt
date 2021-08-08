@@ -1,4 +1,4 @@
-package ru.shitter.data.net.common
+package ru.shkitter.data.net.common
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
