@@ -3,10 +3,22 @@
 
     <string name="splash_app_name">Not\nForgot</string>
 
+    <!-- Common -->
+    <string name="common_something_went_wrong">Что-то пошло не так!</string>
+    <string name="common_sign_in">Войти</string>
+    <string name="common_email">Электронная почта</string>
+    <string name="common_password">Пароль</string>
+
     <!-- Login -->
-    <string name="login_title">Войти</string>
-    <string name="login_email">Электронная почта</string>
-    <string name="login_password">Пароль</string>
-    <string name="login_registration_not_clickable">Нет аккаунта?</string>
-    <string name="login_registration_clickable">\u00A0Зарегистрироваться</string>
+    <string name="login_registration_not_clickable">Нет аккаунта?\u00A0</string>
+    <string name="login_registration_clickable">Зарегистрироваться</string>
+
+    <!-- Registration -->
+    <string name="registration_title">Создать аккаунт</string>
+    <string name="registration_create">Создать</string>
+    <string name="registration_name">Имя</string>
+    <string name="registration_repeat_password">Повторите пароль</string>
+    <string name="registration_have_account">Есть аккаунт?\u00A0</string>
+    <string name="title_activity_splash">SplashActivity</string>
+
 </resources>

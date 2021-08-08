@@ -13,16 +13,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.statusBarsPadding
-import com.google.accompanist.insets.systemBarsPadding
 import ru.shkitter.notforgot.R
-import ru.shkitter.notforgot.presentation.common.theme.SplashBg
+import ru.shkitter.notforgot.presentation.common.theme.BgBlack
 import ru.shkitter.notforgot.presentation.common.theme.TextWhite
 
 @Preview(showBackground = true, showSystemUi = true, device = Devices.PIXEL_3)
 @Composable
 fun SplashScreen() {
-    Surface(color = SplashBg) {
+    Surface(color = BgBlack) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             Spacer(
                 Modifier
