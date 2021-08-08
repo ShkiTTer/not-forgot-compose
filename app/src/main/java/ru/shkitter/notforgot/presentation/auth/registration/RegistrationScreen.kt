@@ -1,4 +1,4 @@
-package ru.shkitter.notforgot.presentation.auth
+package ru.shkitter.notforgot.presentation.auth.registration
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -15,7 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -78,7 +80,10 @@ fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
                     onValueChange = viewModel::onEmailChanged,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(id = R.string.common_email),
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email)
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -87,7 +92,8 @@ fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
                     value = name,
                     onValueChange = viewModel::onNameChanged,
                     modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(id = R.string.registration_name)
+                    label = stringResource(id = R.string.registration_name),
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next)
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -97,7 +103,11 @@ fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
                     onValueChange = viewModel::onPasswordChanged,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(id = R.string.common_password),
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Next
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -107,7 +117,11 @@ fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
                     onValueChange = viewModel::onRepeatPasswordChanged,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(id = R.string.registration_repeat_password),
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(60.dp))

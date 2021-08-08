@@ -1,17 +1,13 @@
 package ru.shkitter.notforgot.presentation.main
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import ru.shkitter.notforgot.presentation.auth.LoginScreen
-import ru.shkitter.notforgot.presentation.auth.RegistrationScreen
+import ru.shkitter.notforgot.presentation.auth.login.LoginScreen
+import ru.shkitter.notforgot.presentation.auth.registration.RegistrationScreen
 import ru.shkitter.notforgot.presentation.common.Screen
-import ru.shkitter.notforgot.presentation.splash.SplashScreen
 
 @Composable
 fun NotForgotApp() {

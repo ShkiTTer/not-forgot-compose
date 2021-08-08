@@ -1,4 +1,4 @@
-package ru.shkitter.notforgot.presentation.auth
+package ru.shkitter.notforgot.presentation.auth.registration
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

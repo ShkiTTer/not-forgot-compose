@@ -3,12 +3,12 @@ package ru.shkitter.notforgot.app.koin
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
-import ru.shkitter.notforgot.presentation.auth.LoginViewModel
-import ru.shkitter.notforgot.presentation.auth.RegistrationViewModel
+import ru.shkitter.notforgot.presentation.auth.login.LoginViewModel
+import ru.shkitter.notforgot.presentation.auth.registration.RegistrationViewModel
 
 private val authModule = module {
     viewModel {
-        LoginViewModel()
+        LoginViewModel(loginUseCase = get())
     }
 
     viewModel { (email: String) ->

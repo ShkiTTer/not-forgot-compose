@@ -1,4 +1,4 @@
-package ru.shkitter.notforgot.presentation.auth
+package ru.shkitter.notforgot.presentation.auth.login
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -15,7 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -75,7 +77,10 @@ fun LoginScreen(onRegistrationClick: (String) -> Unit) {
                     onValueChange = viewModel::onEmailChanged,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(id = R.string.common_email),
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email)
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -85,13 +90,17 @@ fun LoginScreen(onRegistrationClick: (String) -> Unit) {
                     onValueChange = viewModel::onPasswordChanged,
                     modifier = Modifier.fillMaxWidth(),
                     label = stringResource(id = R.string.common_password),
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password)
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(60.dp))
 
                 AppFilledButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { viewModel.login() },
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(id = R.string.common_sign_in)
                 )
