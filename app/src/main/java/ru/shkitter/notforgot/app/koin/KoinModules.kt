@@ -2,12 +2,24 @@ package ru.shkitter.notforgot.app.koin
 
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
+import ru.shitter.data.net.common.Network
+import ru.shkitter.notforgot.BuildConfig
 
 object KoinModules {
 
     private val dataBaseModule = module { }
 
-    private val networkModule = module { }
+    private val networkModule = module {
+        single { Network.appJson }
+        single { Network.getHttpClient() }
+        single {
+            Network.getRetrofit(
+                url = BuildConfig.API_URL,
+                json = get(),
+                client = get()
+            )
+        }
+    }
 
     private val dataSourceModule = module { }
 
