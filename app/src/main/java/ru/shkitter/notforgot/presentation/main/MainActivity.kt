@@ -3,6 +3,8 @@ package ru.shkitter.notforgot.presentation.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.view.WindowCompat
+import com.google.accompanist.insets.ProvideWindowInsets
 import ru.shkitter.notforgot.presentation.common.theme.NotForgotTheme
 
 class MainActivity : ComponentActivity() {
@@ -10,8 +12,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NotForgotTheme {
-                NotForgotApp()
+                ProvideWindowInsets {
+                    NotForgotApp()
+                }
             }
         }
+        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 }

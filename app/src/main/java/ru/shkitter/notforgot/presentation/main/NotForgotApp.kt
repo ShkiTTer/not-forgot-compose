@@ -25,7 +25,9 @@ fun NotForgotApp() {
         }
 
         composable(Screen.Login.route) {
-            LoginScreen()
+            LoginScreen {
+
+            }
         }
 
         composable(Screen.Registration.route) {

@@ -5,4 +5,8 @@
 
     <!-- Login -->
     <string name="login_title">Войти</string>
+    <string name="login_email">Электронная почта</string>
+    <string name="login_password">Пароль</string>
+    <string name="login_registration_not_clickable">Нет аккаунта?</string>
+    <string name="login_registration_clickable">\u00A0Зарегистрироваться</string>
 </resources>
