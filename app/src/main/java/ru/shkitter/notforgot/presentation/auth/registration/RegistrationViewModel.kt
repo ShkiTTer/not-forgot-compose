@@ -2,9 +2,14 @@ package ru.shkitter.notforgot.presentation.auth.registration
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.shkitter.domain.auth.RegistrationUseCase
 import ru.shkitter.notforgot.presentation.common.extensions.asLiveData
 
-class RegistrationViewModel(inputEmail: String) : ViewModel() {
+class RegistrationViewModel(
+    inputEmail: String,
+    private val registrationUseCase: RegistrationUseCase
+) : ViewModel() {
+
     private val _email = MutableLiveData(inputEmail)
     val email = _email.asLiveData()
 

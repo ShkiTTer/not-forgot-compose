@@ -1,5 +1,6 @@
 package ru.shkitter.notforgot.presentation.auth.login
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,7 +28,9 @@ import org.koin.androidx.compose.getViewModel
 import ru.shkitter.notforgot.R
 import ru.shkitter.notforgot.presentation.common.components.AppFilledButton
 import ru.shkitter.notforgot.presentation.common.components.AppOutlinedTextField
+import ru.shkitter.notforgot.presentation.common.components.ContentStateBox
 import ru.shkitter.notforgot.presentation.common.theme.AccentBlue
+import ru.shkitter.notforgot.presentation.common.theme.BgMain
 
 @Preview(showSystemUi = true, showBackground = true, device = Devices.PIXEL_3)
 @Composable
@@ -41,6 +44,19 @@ private fun DefaultLoginScreen() {
 fun LoginScreen(onRegistrationClick: (String) -> Unit) {
     val viewModel = getViewModel<LoginViewModel>()
 
+    ContentStateBox(
+        viewModel = viewModel,
+        modifier = Modifier.fillMaxSize().background(color = BgMain),
+        content = {
+            LoginContent(
+                viewModel = viewModel,
+                onRegistrationClick = onRegistrationClick
+            )
+        })
+}
+
+@Composable
+fun LoginContent(viewModel: LoginViewModel, onRegistrationClick: (String) -> Unit) {
     val email by viewModel.email.observeAsState("")
     val password by viewModel.password.observeAsState("")
 

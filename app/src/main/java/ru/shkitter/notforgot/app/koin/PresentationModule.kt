@@ -12,7 +12,10 @@ private val authModule = module {
     }
 
     viewModel { (email: String) ->
-        RegistrationViewModel(inputEmail = email)
+        RegistrationViewModel(
+            inputEmail = email,
+            registrationUseCase = get()
+        )
     }
 }
 
