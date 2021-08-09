@@ -4,10 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -26,41 +23,28 @@ import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.insets.systemBarsPadding
 import org.koin.androidx.compose.getViewModel
 import ru.shkitter.notforgot.R
+import ru.shkitter.notforgot.presentation.auth.login.model.LoginAction
 import ru.shkitter.notforgot.presentation.common.components.AppFilledButton
 import ru.shkitter.notforgot.presentation.common.components.AppOutlinedTextField
 import ru.shkitter.notforgot.presentation.common.components.ContentStateBox
+import ru.shkitter.notforgot.presentation.common.components.ShowSnack
 import ru.shkitter.notforgot.presentation.common.theme.AccentBlue
 import ru.shkitter.notforgot.presentation.common.theme.BgMain
 
 @Preview(showSystemUi = true, showBackground = true, device = Devices.PIXEL_3)
 @Composable
 private fun DefaultLoginScreen() {
-    LoginScreen {
-
-    }
+    LoginScreen {}
 }
 
 @Composable
 fun LoginScreen(onRegistrationClick: (String) -> Unit) {
     val viewModel = getViewModel<LoginViewModel>()
-
-    ContentStateBox(
-        viewModel = viewModel,
-        modifier = Modifier.fillMaxSize().background(color = BgMain),
-        content = {
-            LoginContent(
-                viewModel = viewModel,
-                onRegistrationClick = onRegistrationClick
-            )
-        })
-}
-
-@Composable
-fun LoginContent(viewModel: LoginViewModel, onRegistrationClick: (String) -> Unit) {
-    val email by viewModel.email.observeAsState("")
-    val password by viewModel.password.observeAsState("")
+    val event by viewModel.event.observeAsState()
+    val scaffoldState = rememberScaffoldState()
 
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 title = {
@@ -74,67 +58,88 @@ fun LoginContent(viewModel: LoginViewModel, onRegistrationClick: (String) -> Uni
                 elevation = 8.dp,
                 modifier = Modifier.statusBarsPadding()
             )
-        }
-    ) { _ ->
-        Box(
-            modifier = Modifier
-                .systemBarsPadding()
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
+        }) { _ ->
 
-                Spacer(modifier = Modifier.height(60.dp))
-
-                AppOutlinedTextField(
-                    value = email,
-                    onValueChange = viewModel::onEmailChanged,
-                    modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(id = R.string.common_email),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                AppOutlinedTextField(
-                    value = password,
-                    onValueChange = viewModel::onPasswordChanged,
-                    modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(id = R.string.common_password),
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(60.dp))
-
-                AppFilledButton(
-                    onClick = { viewModel.login() },
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = R.string.common_sign_in)
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                ClickableText(
-                    text = buildAnnotatedString {
-                        append(stringResource(id = R.string.login_registration_not_clickable))
-                        pushStyle(SpanStyle(color = AccentBlue))
-                        append(stringResource(id = R.string.login_registration_clickable))
-                        pop()
-                    },
-                    onClick = { onRegistrationClick.invoke(email) },
-                    style = MaterialTheme.typography.body2,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+        event?.getContentIfNotHandled()?.let { action ->
+            when (action) {
+                is LoginAction.Succeeded -> Unit
+                is LoginAction.Error -> ShowSnack(snackHostState = scaffoldState.snackbarHostState)
             }
         }
+
+        ContentStateBox(
+            viewModel = viewModel,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = BgMain)
+                .systemBarsPadding(),
+            content = {
+                LoginContent(
+                    viewModel = viewModel,
+                    onRegistrationClick = onRegistrationClick
+                )
+            })
+    }
+}
+
+@Composable
+fun LoginContent(viewModel: LoginViewModel, onRegistrationClick: (String) -> Unit) {
+    val email by viewModel.email.observeAsState("")
+    val password by viewModel.password.observeAsState("")
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+
+        Spacer(modifier = Modifier.height(60.dp))
+
+        AppOutlinedTextField(
+            value = email,
+            onValueChange = viewModel::onEmailChanged,
+            modifier = Modifier.fillMaxWidth(),
+            label = stringResource(id = R.string.common_email),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        AppOutlinedTextField(
+            value = password,
+            onValueChange = viewModel::onPasswordChanged,
+            modifier = Modifier.fillMaxWidth(),
+            label = stringResource(id = R.string.common_password),
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            )
+        )
+
+        Spacer(modifier = Modifier.height(60.dp))
+
+        AppFilledButton(
+            onClick = { viewModel.login() },
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(id = R.string.common_sign_in)
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        ClickableText(
+            text = buildAnnotatedString {
+                append(stringResource(id = R.string.login_registration_not_clickable))
+                pushStyle(SpanStyle(color = AccentBlue))
+                append(stringResource(id = R.string.login_registration_clickable))
+                pop()
+            },
+            onClick = { onRegistrationClick.invoke(email) },
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
     }
 }
