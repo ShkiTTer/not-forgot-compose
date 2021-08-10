@@ -10,10 +10,15 @@ import ru.shkitter.data.net.auth.AuthApi
 import ru.shkitter.data.net.auth.AuthDataSourceImpl
 import ru.shkitter.data.net.common.AuthInterceptor
 import ru.shkitter.data.net.common.Network
+import ru.shkitter.data.net.task.TaskApi
+import ru.shkitter.data.net.task.TaskDataSourceImpl
 import ru.shkitter.domain.auth.*
 import ru.shkitter.domain.session.GetCurrentTokenUseCase
 import ru.shkitter.domain.session.GetCurrentTokenUseCaseImpl
 import ru.shkitter.domain.session.SessionDataSource
+import ru.shkitter.domain.task.GetTaskListUseCase
+import ru.shkitter.domain.task.GetTaskListUseCaseImpl
+import ru.shkitter.domain.task.TaskDataSource
 import ru.shkitter.domain.validation.ValidationUseCase
 import ru.shkitter.domain.validation.ValidationUseCaseImpl
 import ru.shkitter.notforgot.BuildConfig
@@ -40,11 +45,13 @@ object KoinModules {
 
     private val apiModule = module {
         single { Network.getApi<AuthApi>(retrofit = get()) }
+        single { Network.getApi<TaskApi>(retrofit = get()) }
     }
 
     private val dataSourceModule = module {
         factory<AuthDataSource> { AuthDataSourceImpl(authApi = get(), sessionDao = get()) }
         factory<SessionDataSource> { SessionDataSourceImpl(sessionDao = get()) }
+        factory<TaskDataSource> { TaskDataSourceImpl(taskApi = get()) }
     }
 
     private val useCaseModule = module {
@@ -52,6 +59,7 @@ object KoinModules {
         factory<RegistrationUseCase> { RegistrationUseCaseImpl(authDataSource = get()) }
         factory<ValidationUseCase> { ValidationUseCaseImpl() }
         factory<GetCurrentTokenUseCase> { GetCurrentTokenUseCaseImpl(sessionDataSource = get()) }
+        factory<GetTaskListUseCase> { GetTaskListUseCaseImpl(taskDataSource = get()) }
     }
 
     private val baseModule = module {
