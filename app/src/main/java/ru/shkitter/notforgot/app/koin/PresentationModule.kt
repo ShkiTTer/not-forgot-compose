@@ -8,7 +8,10 @@ import ru.shkitter.notforgot.presentation.auth.registration.RegistrationViewMode
 
 private val authModule = module {
     viewModel {
-        LoginViewModel(loginUseCase = get())
+        LoginViewModel(
+            loginUseCase = get(),
+            validationUseCase = get()
+        )
     }
 
     viewModel { (email: String) ->

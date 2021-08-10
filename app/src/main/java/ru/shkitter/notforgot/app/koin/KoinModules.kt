@@ -6,6 +6,8 @@ import ru.shkitter.data.net.auth.AuthApi
 import ru.shkitter.data.net.auth.AuthDataSourceImpl
 import ru.shkitter.data.net.common.Network
 import ru.shkitter.domain.auth.*
+import ru.shkitter.domain.validation.ValidationUseCase
+import ru.shkitter.domain.validation.ValidationUseCaseImpl
 import ru.shkitter.notforgot.BuildConfig
 
 object KoinModules {
@@ -35,6 +37,7 @@ object KoinModules {
     private val useCaseModule = module {
         factory<LoginUseCase> { LoginUseCaseImpl(authDataSource = get()) }
         factory<RegistrationUseCase> { RegistrationUseCaseImpl(authDataSource = get()) }
+        factory<ValidationUseCase> { ValidationUseCaseImpl() }
     }
 
     private val baseModule = module {

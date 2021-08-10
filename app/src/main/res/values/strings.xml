@@ -9,6 +9,11 @@
     <string name="common_email">Электронная почта</string>
     <string name="common_password">Пароль</string>
 
+    <!-- Error -->
+    <string name="error_empty">Заполните поле</string>
+    <string name="error_email_incorrect">Введите корректные E-mail</string>
+    <string name="error_password_min_length">Минимум 8 символов</string>
+
     <!-- Login -->
     <string name="login_registration_not_clickable">Нет аккаунта?\u00A0</string>
     <string name="login_registration_clickable">Зарегистрироваться</string>

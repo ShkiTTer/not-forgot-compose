@@ -99,6 +99,9 @@ fun LoginContent(viewModel: LoginViewModel, onRegistrationClick: (String) -> Uni
     val email by viewModel.email.observeAsState("")
     val password by viewModel.password.observeAsState("")
 
+    val emailError by viewModel.emailError.observeAsState()
+    val passwordError by viewModel.passwordError.observeAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -115,7 +118,8 @@ fun LoginContent(viewModel: LoginViewModel, onRegistrationClick: (String) -> Uni
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
-            )
+            ),
+            error = emailError?.let { stringResource(id = it) }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -129,7 +133,8 @@ fun LoginContent(viewModel: LoginViewModel, onRegistrationClick: (String) -> Uni
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
-            )
+            ),
+            error = passwordError?.let { stringResource(id = it) }
         )
 
         Spacer(modifier = Modifier.height(60.dp))
