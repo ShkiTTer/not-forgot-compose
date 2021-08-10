@@ -17,7 +17,8 @@ private val authModule = module {
     viewModel { (email: String) ->
         RegistrationViewModel(
             inputEmail = email,
-            registrationUseCase = get()
+            registrationUseCase = get(),
+            validationUseCase = get()
         )
     }
 }

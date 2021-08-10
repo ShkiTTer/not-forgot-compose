@@ -9,21 +9,30 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.shkitter.notforgot.presentation.common.theme.*
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "Default Preview")
 @Composable
 private fun DefaultAppOutlinedTextField() {
     AppOutlinedTextField(
         value = "",
         label = "Example",
         onValueChange = {}
+    )
+}
+
+@Preview(showBackground = true, name = "Error Preview")
+@Composable
+private fun ErrorAppOutlinedTextField() {
+    AppOutlinedTextField(
+        value = "",
+        label = "Example",
+        onValueChange = {},
+        error = "Error"
     )
 }
 
@@ -38,6 +47,7 @@ fun AppOutlinedTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
+
     Column {
         OutlinedTextField(
             value = value,

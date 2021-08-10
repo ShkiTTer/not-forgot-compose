@@ -13,6 +13,7 @@
     <string name="error_empty">Заполните поле</string>
     <string name="error_email_incorrect">Введите корректные E-mail</string>
     <string name="error_password_min_length">Минимум 8 символов</string>
+    <string name="error_password_not_equal">Пароли не совпадают</string>
 
     <!-- Login -->
     <string name="login_registration_not_clickable">Нет аккаунта?\u00A0</string>

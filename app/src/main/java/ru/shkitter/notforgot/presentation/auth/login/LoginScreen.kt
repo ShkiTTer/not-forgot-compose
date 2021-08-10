@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -21,7 +23,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
@@ -29,6 +30,7 @@ import ru.shkitter.notforgot.R
 import ru.shkitter.notforgot.presentation.auth.login.model.LoginAction
 import ru.shkitter.notforgot.presentation.common.components.AppFilledButton
 import ru.shkitter.notforgot.presentation.common.components.AppOutlinedTextField
+import ru.shkitter.notforgot.presentation.common.components.BaseTopAppBar
 import ru.shkitter.notforgot.presentation.common.components.ContentStateBox
 import ru.shkitter.notforgot.presentation.common.theme.AccentBlue
 import ru.shkitter.notforgot.presentation.common.theme.BgMain
@@ -49,23 +51,8 @@ fun LoginScreen(onRegistrationClick: (String) -> Unit) {
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.common_sign_in),
-                        style = MaterialTheme.typography.h3
-                    )
-                },
-                backgroundColor = MaterialTheme.colors.background,
-                contentColor = MaterialTheme.colors.onBackground,
-                elevation = 8.dp,
-                modifier = Modifier.statusBarsPadding()
-            )
-        },
-        snackbarHost = {
-            scaffoldState.snackbarHostState
-        }) { _ ->
+        topBar = { BaseTopAppBar(title = stringResource(id = R.string.common_sign_in)) },
+        snackbarHost = { scaffoldState.snackbarHostState }) { _ ->
 
         event?.getContentIfNotHandled()?.let { action ->
             when (action) {
