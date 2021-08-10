@@ -5,6 +5,7 @@ import ru.shkitter.domain.session.model.Session
 
 interface SessionDataSource {
     fun observeSession(): Flow<Session?>
+    suspend fun getSessionEager(): Session?
     suspend fun saveSession(session: Session)
     suspend fun clearSessions()
 }

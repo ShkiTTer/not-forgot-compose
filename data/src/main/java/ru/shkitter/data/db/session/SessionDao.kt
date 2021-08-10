@@ -13,6 +13,9 @@ interface SessionDao {
     @Query("SELECT * FROM sessions LIMIT 1")
     fun observeSession(): Flow<SessionEntity?>
 
+    @Query("SELECT * FROM sessions LIMIT 1")
+    suspend fun getSessionEager(): SessionEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveSession(sessionEntity: SessionEntity)
 

@@ -13,6 +13,8 @@ class SessionDataSourceImpl(
     override fun observeSession(): Flow<Session?> =
         sessionDao.observeSession().map { it?.toDomain() }
 
+    override suspend fun getSessionEager(): Session? = sessionDao.getSessionEager()?.toDomain()
+
     override suspend fun saveSession(session: Session) {
         sessionDao.saveSession(SessionEntity.fromDomain(session))
     }

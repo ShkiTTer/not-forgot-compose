@@ -15,8 +15,9 @@ object Network {
         prettyPrint = true
     }
 
-    fun getHttpClient() = OkHttpClient.Builder()
+    fun getHttpClient(authInterceptor: AuthInterceptor) = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        .addInterceptor(authInterceptor)
         .build()
 
     fun getRetrofit(url: String, json: Json, client: OkHttpClient) = Retrofit.Builder()
