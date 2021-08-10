@@ -47,10 +47,17 @@ fun NotForgotApp() {
         ) { backStackEntry ->
             RegistrationScreen(
                 inputEmail = backStackEntry.arguments?.getString(Screen.Registration.PARAM_EMAIL)
-                    .orEmpty()
-            ) {
-                navController.popBackStack()
-            }
+                    .orEmpty(),
+                onSignInClick = {
+                    navController.popBackStack()
+                },
+                onRegisterSucceeded = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.TaskList.route) {
+                        popUpTo(Screen.Login.route) {inclusive = true}
+                    }
+                }
+            )
         }
 
         composable(Screen.TaskList.route) {

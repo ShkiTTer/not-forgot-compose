@@ -41,13 +41,17 @@ import ru.shkitter.notforgot.presentation.common.theme.BgMain
 @Preview(showBackground = true, showSystemUi = true, device = Devices.PIXEL_3)
 @Composable
 private fun DefaultRegistrationScreen() {
-    RegistrationScreen("") {
+    RegistrationScreen(inputEmail = "", onSignInClick = { /*TODO*/ }) {
 
     }
 }
 
 @Composable
-fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
+fun RegistrationScreen(
+    inputEmail: String,
+    onSignInClick: () -> Unit,
+    onRegisterSucceeded: () -> Unit
+) {
     val viewModel = getViewModel<RegistrationViewModel> {
         parametersOf(inputEmail)
     }
@@ -65,7 +69,7 @@ fun RegistrationScreen(inputEmail: String, onSignInClick: () -> Unit) {
 
         event?.getContentIfNotHandled()?.let { action ->
             when (action) {
-                is RegistrationAction.Succeeded -> Unit
+                is RegistrationAction.Succeeded -> onRegisterSucceeded.invoke()
                 is RegistrationAction.Error -> coroutineScope.launch {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = context.getString(R.string.common_something_went_wrong)
