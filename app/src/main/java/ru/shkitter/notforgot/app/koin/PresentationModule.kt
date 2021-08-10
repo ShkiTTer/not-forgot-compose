@@ -26,7 +26,7 @@ private val authModule = module {
 
 private val taskModule = module {
     viewModel {
-        TaskListViewModel()
+        TaskListViewModel(getTaskListUseCase = get())
     }
 }
 

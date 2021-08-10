@@ -2,19 +2,24 @@ package ru.shkitter.notforgot.presentation.task.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.systemBarsPadding
 import org.koin.androidx.compose.getViewModel
 import ru.shkitter.notforgot.R
@@ -65,5 +70,16 @@ fun TaskListScreen() {
 
 @Composable
 fun TaskListContent(viewModel: TaskListViewModel) {
+    val tasks by viewModel.tasks.observeAsState(initial = mapOf())
 
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars)
+    ) {
+        tasks.forEach { category, tasks ->
+            item {
+
+            }
+        }
+    }
 }
