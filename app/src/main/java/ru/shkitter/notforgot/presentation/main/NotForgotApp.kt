@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import ru.shkitter.notforgot.presentation.auth.login.LoginScreen
 import ru.shkitter.notforgot.presentation.auth.registration.RegistrationScreen
 import ru.shkitter.notforgot.presentation.common.Screen
+import ru.shkitter.notforgot.presentation.task.list.TaskListScreen
 
 @Composable
 fun NotForgotApp() {
@@ -34,6 +35,10 @@ fun NotForgotApp() {
             ) {
                 navController.popBackStack()
             }
+        }
+
+        composable(Screen.TaskList.route) {
+            TaskListScreen()
         }
     }
 }

@@ -1,19 +1,25 @@
 package ru.shkitter.notforgot.presentation.common
 
-sealed class Screen {
+sealed interface Screen {
     abstract val route: String
 
-    object Splash: Screen() {
+    object Splash: Screen {
         override val route: String = "splash"
     }
-    object Login: Screen() {
+
+    object Login: Screen {
         override val route: String = "login"
     }
-    object Registration: Screen() {
+
+    object Registration: Screen {
         const val PARAM_EMAIL = "email"
 
         override val route: String = "registration?email={$PARAM_EMAIL}"
 
         fun createRouteWithEmail(email: String) = "registration?email=$email"
+    }
+
+    object TaskList: Screen {
+        override val route: String = "task-list"
     }
 }

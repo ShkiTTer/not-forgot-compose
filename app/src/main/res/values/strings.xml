@@ -27,4 +27,6 @@
     <string name="registration_have_account">Есть аккаунт?\u00A0</string>
     <string name="title_activity_splash">SplashActivity</string>
 
+    <!-- Task List -->
+    <string name="task_list_title">Not Forgot</string>
 </resources>
