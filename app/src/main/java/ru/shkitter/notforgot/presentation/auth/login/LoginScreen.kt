@@ -8,8 +8,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -21,13 +23,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
 import com.google.accompanist.insets.systemBarsPadding
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import ru.shkitter.notforgot.R
 import ru.shkitter.notforgot.presentation.auth.login.model.LoginAction
 import ru.shkitter.notforgot.presentation.common.components.AppFilledButton
 import ru.shkitter.notforgot.presentation.common.components.AppOutlinedTextField
 import ru.shkitter.notforgot.presentation.common.components.ContentStateBox
-import ru.shkitter.notforgot.presentation.common.components.ShowSnack
 import ru.shkitter.notforgot.presentation.common.theme.AccentBlue
 import ru.shkitter.notforgot.presentation.common.theme.BgMain
 
@@ -42,6 +44,8 @@ fun LoginScreen(onRegistrationClick: (String) -> Unit) {
     val viewModel = getViewModel<LoginViewModel>()
     val event by viewModel.event.observeAsState()
     val scaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -58,17 +62,25 @@ fun LoginScreen(onRegistrationClick: (String) -> Unit) {
                 elevation = 8.dp,
                 modifier = Modifier.statusBarsPadding()
             )
+        },
+        snackbarHost = {
+            scaffoldState.snackbarHostState
         }) { _ ->
 
         event?.getContentIfNotHandled()?.let { action ->
             when (action) {
                 is LoginAction.Succeeded -> Unit
-                is LoginAction.Error -> ShowSnack(snackHostState = scaffoldState.snackbarHostState)
+                is LoginAction.Error -> coroutineScope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = context.getString(R.string.common_something_went_wrong)
+                    )
+                }
             }
         }
 
         ContentStateBox(
             viewModel = viewModel,
+            snackbarHostState = scaffoldState.snackbarHostState,
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BgMain)
