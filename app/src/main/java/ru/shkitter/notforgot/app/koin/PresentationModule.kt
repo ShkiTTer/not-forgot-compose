@@ -5,6 +5,7 @@ import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import ru.shkitter.notforgot.presentation.auth.login.LoginViewModel
 import ru.shkitter.notforgot.presentation.auth.registration.RegistrationViewModel
+import ru.shkitter.notforgot.presentation.task.list.TaskListViewModel
 
 private val authModule = module {
     viewModel {
@@ -23,6 +24,12 @@ private val authModule = module {
     }
 }
 
+private val taskModule = module {
+    viewModel {
+        TaskListViewModel()
+    }
+}
+
 internal val presentationModule = module {
-    loadKoinModules(listOf(authModule))
+    loadKoinModules(listOf(authModule, taskModule))
 }

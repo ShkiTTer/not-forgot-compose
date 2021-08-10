@@ -1,7 +1,7 @@
 package ru.shkitter.notforgot.presentation.common
 
 sealed interface Screen {
-    abstract val route: String
+    val route: String
 
     object Splash: Screen {
         override val route: String = "splash"

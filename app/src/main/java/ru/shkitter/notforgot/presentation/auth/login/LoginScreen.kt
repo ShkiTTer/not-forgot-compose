@@ -38,11 +38,17 @@ import ru.shkitter.notforgot.presentation.common.theme.BgMain
 @Preview(showSystemUi = true, showBackground = true, device = Devices.PIXEL_3)
 @Composable
 private fun DefaultLoginScreen() {
-    LoginScreen {}
+    LoginScreen(
+        onRegistrationClick = {},
+        onSucceededLogin = {}
+    )
 }
 
 @Composable
-fun LoginScreen(onRegistrationClick: (String) -> Unit) {
+fun LoginScreen(
+    onRegistrationClick: (String) -> Unit,
+    onSucceededLogin: () -> Unit
+) {
     val viewModel = getViewModel<LoginViewModel>()
     val event by viewModel.event.observeAsState()
     val scaffoldState = rememberScaffoldState()
@@ -56,7 +62,7 @@ fun LoginScreen(onRegistrationClick: (String) -> Unit) {
 
         event?.getContentIfNotHandled()?.let { action ->
             when (action) {
-                is LoginAction.Succeeded -> Unit
+                is LoginAction.Succeeded -> onSucceededLogin.invoke()
                 is LoginAction.Error -> coroutineScope.launch {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = context.getString(R.string.common_something_went_wrong)
