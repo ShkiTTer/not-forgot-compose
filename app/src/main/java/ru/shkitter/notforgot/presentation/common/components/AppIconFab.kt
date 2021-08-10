@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.accompanist.insets.navigationBarsPadding
 
 @Preview
 @Composable
@@ -24,13 +25,16 @@ fun AppIconFab(
     icon: ImageVector,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.secondary,
-    contentColor: Color = MaterialTheme.colors.onSecondary
+    contentColor: Color = MaterialTheme.colors.onSecondary,
+    hasInsetsPadding: Boolean = true
 ) {
+    val insetsModifier = if (hasInsetsPadding) Modifier.navigationBarsPadding() else Modifier
+
     FloatingActionButton(
         onClick = onClick,
         backgroundColor = backgroundColor,
         contentColor = contentColor,
-        modifier = modifier
+        modifier = modifier.then(insetsModifier)
     ) {
         Icon(imageVector = icon, contentDescription = null)
     }
@@ -42,13 +46,16 @@ fun AppIconFab(
     icon: Painter,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.secondary,
-    contentColor: Color = MaterialTheme.colors.onSecondary
+    contentColor: Color = MaterialTheme.colors.onSecondary,
+    hasInsetsPadding: Boolean = true
 ) {
+    val insetsModifier = if (hasInsetsPadding) Modifier.navigationBarsPadding() else Modifier
+
     FloatingActionButton(
         onClick = onClick,
         backgroundColor = backgroundColor,
         contentColor = contentColor,
-        modifier = modifier
+        modifier = modifier.then(insetsModifier),
     ) {
         Icon(painter = icon, contentDescription = null)
     }
