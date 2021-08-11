@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import ru.shkitter.domain.task.model.Category
 import ru.shkitter.domain.task.model.Priority
 import ru.shkitter.domain.task.model.Task
@@ -47,12 +48,16 @@ private fun DefaultTaskDetailsContent() {
 }
 
 @Composable
-fun TaskDetailsScreen(task: Task) {
+fun TaskDetailsScreen(task: Task, onBackClick: () -> Unit) {
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { BaseTopAppBar(title = stringResource(id = R.string.task_details_title)) }) { _ ->
+        topBar = {
+            BaseTopAppBar(
+                title = stringResource(id = R.string.task_details_title),
+                onBackClick = { onBackClick.invoke() })
+        }) { _ ->
 
         TaskDetailsContent(task = task)
     }

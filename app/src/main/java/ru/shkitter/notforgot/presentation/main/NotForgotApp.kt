@@ -1,11 +1,12 @@
 package ru.shkitter.notforgot.presentation.main
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
-import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.presentation.auth.login.LoginScreen
 import ru.shkitter.notforgot.presentation.auth.registration.RegistrationScreen
@@ -14,13 +15,14 @@ import ru.shkitter.notforgot.presentation.splash.SplashScreen
 import ru.shkitter.notforgot.presentation.task.details.TaskDetailsScreen
 import ru.shkitter.notforgot.presentation.task.list.TaskListScreen
 
+@ExperimentalAnimationApi
 @Composable
 fun NotForgotApp() {
-    val navController = rememberNavController()
+    val navController = rememberAnimatedNavController()
 
-    NavHost(navController = navController, startDestination = Screen.Splash.route) {
+    AnimatedNavHost(navController = navController, startDestination = Screen.Splash.route) {
 
-        composable(Screen.Splash.route) {
+        composable(route = Screen.Splash.route) {
             SplashScreen { isUserLogged ->
                 navController.popBackStack()
                 navController.navigate(if (isUserLogged) Screen.TaskList.route else Screen.Login.route)
@@ -31,6 +33,7 @@ fun NotForgotApp() {
             LoginScreen(
                 onRegistrationClick = { email ->
                     navController.navigate(Screen.Registration.createRouteWithEmail(email)) {
+
                         popUpTo(Screen.Login.route)
                     }
                 },
@@ -75,7 +78,7 @@ fun NotForgotApp() {
             }
         }
 
-        composable(Screen.TaskDetails.route, arguments = listOf(
+        composable(route = Screen.TaskDetails.route, arguments = listOf(
             navArgument(Screen.TaskDetails.PARAM_TASK) {
                 type = NavType.SerializableType(Task::class.java)
             }
@@ -83,7 +86,7 @@ fun NotForgotApp() {
             val task =
                 navController.previousBackStackEntry?.arguments?.getSerializable(Screen.TaskDetails?.PARAM_TASK) as? Task
                     ?: return@composable
-            TaskDetailsScreen(task = task)
+            TaskDetailsScreen(task = task, onBackClick = { navController.popBackStack() })
         }
     }
 }
