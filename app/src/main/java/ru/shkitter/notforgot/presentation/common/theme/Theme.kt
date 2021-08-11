@@ -6,12 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val LightColorPalette = lightColors(
-    primary = BgMain,
+    primary = BgMainColor,
     primaryVariant = StatusBarColor,
-    secondary = AccentBlack,
-    surface = BgMain,
-    background = BgMain,
-    onSecondary = TextWhite,
+    secondary = AccentBlackColor,
+    surface = BgMainColor,
+    background = BgMainColor,
+    onSecondary = TextWhiteColor,
     onPrimary = Color.Black,
     onBackground = Color.Black,
     onSurface = Color.Black

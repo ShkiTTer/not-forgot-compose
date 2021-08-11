@@ -1,5 +1,6 @@
 package ru.shkitter.domain.task.model
 
+import java.io.Serializable
 import java.time.Instant
 
 data class Task(
@@ -11,4 +12,4 @@ data class Task(
     val created: Instant,
     val category: Category,
     val priority: Priority
-)
+) : Serializable

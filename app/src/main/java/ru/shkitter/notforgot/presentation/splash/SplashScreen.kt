@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.getViewModel
 import ru.shkitter.notforgot.R
-import ru.shkitter.notforgot.presentation.common.theme.BgBlack
-import ru.shkitter.notforgot.presentation.common.theme.TextWhite
+import ru.shkitter.notforgot.presentation.common.theme.BgBlackColor
+import ru.shkitter.notforgot.presentation.common.theme.TextWhiteColor
 
 @Preview(showBackground = true, showSystemUi = true, device = Devices.PIXEL_3)
 @Composable
@@ -38,7 +38,7 @@ fun SplashScreen(onShown: (Boolean) -> Unit) {
         currentOnTimeout(viewModel.checkUserLogged())
     }
 
-    Surface(color = BgBlack) {
+    Surface(color = BgBlackColor) {
         Column(
             Modifier
                 .fillMaxSize()
@@ -51,7 +51,7 @@ fun SplashScreen(onShown: (Boolean) -> Unit) {
 
             Text(
                 text = stringResource(R.string.splash_app_name),
-                color = TextWhite,
+                color = TextWhiteColor,
                 style = MaterialTheme.typography.h1
             )
 

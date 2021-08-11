@@ -29,4 +29,11 @@
 
     <!-- Task List -->
     <string name="task_list_title">Not Forgot</string>
+    <string name="task_list_empty">Пока что у вас нет никаких дел.\nХорошего отдыха!</string>
+
+    <!-- Task Details -->
+    <string name="task_details_title">Заметка</string>
+    <string name="task_details_done">Выполнено</string>
+    <string name="task_details_undone">Не выполнено</string>
+    <string name="task_details_deadline">До %s</string>
 </resources>

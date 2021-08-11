@@ -53,7 +53,8 @@ class TaskListViewModel(
                                 addAll(data)
                             }
                             initGroupedTasks()
-                            _contentState.value = ContentState.Content
+                            _contentState.value =
+                                if (data.isEmpty()) ContentState.Empty else ContentState.Content
                         }
                         .onFailure {}
                 }

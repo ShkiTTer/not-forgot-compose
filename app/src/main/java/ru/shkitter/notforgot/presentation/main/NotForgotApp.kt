@@ -1,14 +1,17 @@
 package ru.shkitter.notforgot.presentation.main
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.presentation.auth.login.LoginScreen
 import ru.shkitter.notforgot.presentation.auth.registration.RegistrationScreen
 import ru.shkitter.notforgot.presentation.common.Screen
 import ru.shkitter.notforgot.presentation.splash.SplashScreen
+import ru.shkitter.notforgot.presentation.task.details.TaskDetailsScreen
 import ru.shkitter.notforgot.presentation.task.list.TaskListScreen
 
 @Composable
@@ -61,7 +64,26 @@ fun NotForgotApp() {
         }
 
         composable(Screen.TaskList.route) {
-            TaskListScreen()
+            TaskListScreen { task ->
+                navController.currentBackStackEntry?.arguments?.putSerializable(
+                    Screen.TaskDetails.PARAM_TASK,
+                    task
+                )
+                navController.navigate(Screen.TaskDetails.route) {
+                    popUpTo(Screen.TaskList.route)
+                }
+            }
+        }
+
+        composable(Screen.TaskDetails.route, arguments = listOf(
+            navArgument(Screen.TaskDetails.PARAM_TASK) {
+                type = NavType.SerializableType(Task::class.java)
+            }
+        )) {
+            val task =
+                navController.previousBackStackEntry?.arguments?.getSerializable(Screen.TaskDetails?.PARAM_TASK) as? Task
+                    ?: return@composable
+            TaskDetailsScreen(task = task)
         }
     }
 }

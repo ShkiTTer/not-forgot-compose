@@ -5,9 +5,9 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.shkitter.notforgot.presentation.common.theme.AccentBlue
-import ru.shkitter.notforgot.presentation.common.theme.BgBlack
-import ru.shkitter.notforgot.presentation.common.theme.TextWhite
+import ru.shkitter.notforgot.presentation.common.theme.AccentBlueColor
+import ru.shkitter.notforgot.presentation.common.theme.BgBlackColor
+import ru.shkitter.notforgot.presentation.common.theme.TextWhiteColor
 
 @Composable
 fun AppSnackbar(
@@ -16,18 +16,18 @@ fun AppSnackbar(
 ) {
     SnackbarHost(hostState = snackbarHostState, modifier = modifier) { data ->
         Snackbar(
-            backgroundColor = BgBlack,
+            backgroundColor = BgBlackColor,
             modifier = Modifier.padding(16.dp),
             action = {
                 data.actionLabel?.let { label ->
                     Text(
                         text = label,
                         style = MaterialTheme.typography.h4,
-                        color = AccentBlue
+                        color = AccentBlueColor
                     )
                 }
             }) {
-            Text(text = data.message, style = MaterialTheme.typography.h5, color = TextWhite)
+            Text(text = data.message, style = MaterialTheme.typography.h5, color = TextWhiteColor)
         }
     }
 }

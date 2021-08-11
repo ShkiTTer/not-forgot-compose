@@ -3,6 +3,7 @@ package ru.shkitter.data.net.task.model
 import kotlinx.serialization.Serializable
 import ru.shkitter.domain.task.model.Task
 import java.time.Instant
+import java.time.ZoneId
 
 @Serializable
 data class TaskDto(

@@ -35,8 +35,8 @@ import ru.shkitter.notforgot.presentation.common.components.AppFilledButton
 import ru.shkitter.notforgot.presentation.common.components.AppOutlinedTextField
 import ru.shkitter.notforgot.presentation.common.components.BaseTopAppBar
 import ru.shkitter.notforgot.presentation.common.components.ContentStateBox
-import ru.shkitter.notforgot.presentation.common.theme.AccentBlue
-import ru.shkitter.notforgot.presentation.common.theme.BgMain
+import ru.shkitter.notforgot.presentation.common.theme.AccentBlueColor
+import ru.shkitter.notforgot.presentation.common.theme.BgMainColor
 
 @Preview(showBackground = true, showSystemUi = true, device = Devices.PIXEL_3)
 @Composable
@@ -84,7 +84,7 @@ fun RegistrationScreen(
             snackbarHostState = scaffoldState.snackbarHostState,
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = BgMain)
+                .background(color = BgMainColor)
         )
     }
 }
@@ -177,7 +177,7 @@ fun RegistrationContent(viewModel: RegistrationViewModel, onSignInClick: () -> U
         ClickableText(
             text = buildAnnotatedString {
                 append(stringResource(id = R.string.registration_have_account))
-                pushStyle(SpanStyle(color = AccentBlue))
+                pushStyle(SpanStyle(color = AccentBlueColor))
                 append(stringResource(id = R.string.common_sign_in))
                 pop()
             },

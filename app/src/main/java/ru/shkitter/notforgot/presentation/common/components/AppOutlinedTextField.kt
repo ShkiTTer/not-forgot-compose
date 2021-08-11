@@ -62,12 +62,12 @@ fun AppOutlinedTextField(
                 Text(text = label, style = MaterialTheme.typography.caption)
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = AccentBlue,
-                focusedLabelColor = AccentBlue,
-                cursorColor = BgBlack,
-                textColor = TextBlack,
-                unfocusedBorderColor = BgGray,
-                unfocusedLabelColor = TextGray
+                focusedBorderColor = AccentBlueColor,
+                focusedLabelColor = AccentBlueColor,
+                cursorColor = BgBlackColor,
+                textColor = TextBlackColor,
+                unfocusedBorderColor = BgGrayColor,
+                unfocusedLabelColor = TextGrayColor
             )
         )
 

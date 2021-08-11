@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import ru.shkitter.notforgot.presentation.common.theme.BgBlack
+import ru.shkitter.notforgot.presentation.common.theme.BgBlackColor
 
 @Preview(showBackground = true)
 @Composable
@@ -25,7 +25,7 @@ fun AppFilledButton(
 ) {
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(backgroundColor = BgBlack),
+        colors = ButtonDefaults.buttonColors(backgroundColor = BgBlackColor),
         modifier = modifier
     ) {
         Text(
