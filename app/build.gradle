@@ -66,7 +66,10 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
     // Insets
-    implementation "com.google.accompanist:accompanist-insets:0.16.0"
+    implementation "com.google.accompanist:accompanist-insets:0.16.1"
+
+    // Swipe To Refresh
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.16.1"
 
     // Arch Components
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'

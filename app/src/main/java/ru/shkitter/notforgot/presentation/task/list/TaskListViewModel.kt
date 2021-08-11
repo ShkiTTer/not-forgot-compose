@@ -3,6 +3,7 @@ package ru.shkitter.notforgot.presentation.task.list
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import ru.shkitter.domain.task.GetTaskListUseCase
@@ -19,20 +20,31 @@ class TaskListViewModel(
     private val _tasks = MutableLiveData<Map<Category, List<Task>>>()
     val tasks = _tasks.asLiveData()
 
-    private val taskList = mutableListOf<Task>()
+    private val _isRefreshing = MutableLiveData<Boolean>()
+    val isRefreshing = _isRefreshing.asLiveData()
 
-    init {
-        fetchTasks()
-    }
+    private val taskList = mutableListOf<Task>()
 
     private fun initGroupedTasks() {
         _tasks.value = taskList.groupBy { it.category }
     }
 
-    fun fetchTasks() {
+    init {
+        fetchTasks()
+    }
+
+    fun fetchTasks(fromRefresh: Boolean = false) {
         viewModelScope.launch {
             getTaskListUseCase()
-                .onStart { _contentState.value = ContentState.Loading }
+                .onStart {
+                    if (fromRefresh) {
+                        _isRefreshing.value = true
+                        return@onStart
+                    }
+
+                    _contentState.value = ContentState.Loading
+                }
+                .onCompletion { _isRefreshing.value = false }
                 .collect { result ->
                     result
                         .onSuccess { data ->
