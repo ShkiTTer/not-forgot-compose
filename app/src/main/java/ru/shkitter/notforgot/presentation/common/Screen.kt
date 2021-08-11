@@ -28,4 +28,10 @@ sealed interface Screen {
 
         override val route: String = "task-details"
     }
+
+    object CreateTask: Screen {
+        const val PARAM_TASK = "task"
+
+        override val route: String = "create-task"
+    }
 }

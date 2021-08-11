@@ -6,6 +6,7 @@ import org.koin.dsl.module
 import ru.shkitter.notforgot.presentation.auth.login.LoginViewModel
 import ru.shkitter.notforgot.presentation.auth.registration.RegistrationViewModel
 import ru.shkitter.notforgot.presentation.splash.SplashViewModel
+import ru.shkitter.notforgot.presentation.task.create.CreateTaskViewModel
 import ru.shkitter.notforgot.presentation.task.list.TaskListViewModel
 
 private val authModule = module {
@@ -32,6 +33,10 @@ private val authModule = module {
 private val taskModule = module {
     viewModel {
         TaskListViewModel(getTaskListUseCase = get())
+    }
+
+    viewModel {
+        CreateTaskViewModel()
     }
 }
 

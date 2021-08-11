@@ -41,7 +41,7 @@ fun AppFilledTextField(
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
-    backgroundColor: Color =
+    backgroundColor: Color = BgTextField,
     error: String? = null,
     singleLine: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -68,7 +68,7 @@ fun AppFilledTextField(
                 unfocusedLabelColor = TextGrayColor,
                 focusedIndicatorColor = AccentBlueColor,
                 unfocusedIndicatorColor = BgGrayColor,
-                backgroundColor =
+                backgroundColor = backgroundColor
             )
         )
 
@@ -89,6 +89,7 @@ fun AppFilledTextField(
     placeholder: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = BgTextField,
     error: String? = null,
     singleLine: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -115,7 +116,8 @@ fun AppFilledTextField(
                 unfocusedLabelColor = TextGrayColor,
                 focusedIndicatorColor = AccentBlueColor,
                 unfocusedIndicatorColor = BgGrayColor,
-                placeholderColor = TextGrayColor
+                placeholderColor = TextGrayColor,
+                backgroundColor = backgroundColor
             )
         )
 

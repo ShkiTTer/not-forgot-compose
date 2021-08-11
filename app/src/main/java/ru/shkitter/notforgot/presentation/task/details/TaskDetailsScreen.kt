@@ -1,6 +1,7 @@
 package ru.shkitter.notforgot.presentation.task.details
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -42,13 +43,14 @@ private fun DefaultTaskDetailsScreen() {
                 Category(0, "Учеба"),
                 Priority(0, "Important", "#FFD130")
             ),
-            onBackClick = {}
+            onBackClick = {},
+            onEditTask = {}
         )
     }
 }
 
 @Composable
-fun TaskDetailsScreen(task: Task, onBackClick: () -> Unit) {
+fun TaskDetailsScreen(task: Task, onBackClick: () -> Unit, onEditTask: (Task) -> Unit) {
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
@@ -59,12 +61,12 @@ fun TaskDetailsScreen(task: Task, onBackClick: () -> Unit) {
                 onBackClick = { onBackClick.invoke() })
         }) { _ ->
 
-        TaskDetailsContent(task = task)
+        TaskDetailsContent(task = task, onEditTask = onEditTask)
     }
 }
 
 @Composable
-fun TaskDetailsContent(task: Task) {
+fun TaskDetailsContent(task: Task, onEditTask: (Task) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -83,7 +85,8 @@ fun TaskDetailsContent(task: Task) {
             Icon(
                 imageVector = Icons.Outlined.Edit,
                 contentDescription = null,
-                tint = AccentBlueColor
+                tint = AccentBlueColor,
+                modifier = Modifier.clickable { onEditTask.invoke(task) }
             )
         }
 

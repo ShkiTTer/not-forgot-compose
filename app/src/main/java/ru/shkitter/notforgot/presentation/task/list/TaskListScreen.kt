@@ -37,11 +37,11 @@ import ru.shkitter.notforgot.presentation.task.list.items.TaskListTaskItem
 @Preview(showBackground = true, showSystemUi = true, device = Devices.PIXEL_3)
 @Composable
 private fun DefaultTaskListScreen() {
-    TaskListScreen {}
+    TaskListScreen(onTaskClick = {}, onCreateTaskClick = {})
 }
 
 @Composable
-fun TaskListScreen(onTaskClick: (Task) -> Unit) {
+fun TaskListScreen(onTaskClick: (Task) -> Unit, onCreateTaskClick: () -> Unit) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -52,7 +52,7 @@ fun TaskListScreen(onTaskClick: (Task) -> Unit) {
         topBar = { BaseTopAppBar(title = stringResource(id = R.string.task_list_title)) },
         scaffoldState = scaffoldState,
         snackbarHost = { scaffoldState.snackbarHostState },
-        floatingActionButton = { AppIconFab(onClick = { /*TODO*/ }, icon = Icons.Filled.Add) },
+        floatingActionButton = { AppIconFab(onClick = { onCreateTaskClick.invoke() }, icon = Icons.Filled.Add) },
         floatingActionButtonPosition = FabPosition.End
     ) { _ ->
 

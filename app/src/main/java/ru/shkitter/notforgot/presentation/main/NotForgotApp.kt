@@ -12,6 +12,7 @@ import ru.shkitter.notforgot.presentation.auth.login.LoginScreen
 import ru.shkitter.notforgot.presentation.auth.registration.RegistrationScreen
 import ru.shkitter.notforgot.presentation.common.Screen
 import ru.shkitter.notforgot.presentation.splash.SplashScreen
+import ru.shkitter.notforgot.presentation.task.create.CreateTaskScreen
 import ru.shkitter.notforgot.presentation.task.details.TaskDetailsScreen
 import ru.shkitter.notforgot.presentation.task.list.TaskListScreen
 
@@ -67,15 +68,21 @@ fun NotForgotApp() {
         }
 
         composable(Screen.TaskList.route) {
-            TaskListScreen { task ->
-                navController.currentBackStackEntry?.arguments?.putSerializable(
-                    Screen.TaskDetails.PARAM_TASK,
-                    task
-                )
-                navController.navigate(Screen.TaskDetails.route) {
-                    popUpTo(Screen.TaskList.route)
-                }
-            }
+            TaskListScreen(
+                onTaskClick = { task ->
+                    navController.currentBackStackEntry?.arguments?.putSerializable(
+                        Screen.TaskDetails.PARAM_TASK,
+                        task
+                    )
+                    navController.navigate(Screen.TaskDetails.route) {
+                        popUpTo(Screen.TaskList.route)
+                    }
+                },
+                onCreateTaskClick = {
+                    navController.navigate(Screen.CreateTask.route) {
+                        popUpTo(Screen.TaskList.route)
+                    }
+                })
         }
 
         composable(route = Screen.TaskDetails.route, arguments = listOf(
@@ -86,7 +93,28 @@ fun NotForgotApp() {
             val task =
                 navController.previousBackStackEntry?.arguments?.getSerializable(Screen.TaskDetails?.PARAM_TASK) as? Task
                     ?: return@composable
-            TaskDetailsScreen(task = task, onBackClick = { navController.popBackStack() })
+            TaskDetailsScreen(task = task,
+                onBackClick = { navController.popBackStack() },
+                onEditTask = { taskForEdit ->
+                    navController.currentBackStackEntry?.arguments
+                        ?.putSerializable(Screen.CreateTask.PARAM_TASK, taskForEdit)
+                    navController.navigate(Screen.CreateTask.route) {
+                        popUpTo(Screen.TaskDetails.route)
+                    }
+                })
+        }
+
+        composable(
+            route = Screen.CreateTask.route,
+            arguments = listOf(navArgument(Screen.CreateTask.PARAM_TASK) {
+                type = NavType.SerializableType(Task::class.java)
+                nullable = true
+            })
+        ) {
+            val task = navController.previousBackStackEntry?.arguments
+                ?.getSerializable(Screen.CreateTask.PARAM_TASK) as? Task
+
+            CreateTaskScreen(task = task, onBackClick = { navController.popBackStack() })
         }
     }
 }
