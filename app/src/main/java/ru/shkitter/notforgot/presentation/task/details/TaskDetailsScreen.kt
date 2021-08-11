@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import ru.shkitter.domain.task.model.Category
 import ru.shkitter.domain.task.model.Priority
 import ru.shkitter.domain.task.model.Task
@@ -29,9 +28,9 @@ import java.time.Instant
 
 @Preview(showBackground = true, showSystemUi = true, device = Devices.PIXEL_3)
 @Composable
-private fun DefaultTaskDetailsContent() {
+private fun DefaultTaskDetailsScreen() {
     MaterialTheme {
-        TaskDetailsContent(
+        TaskDetailsScreen(
             task = Task(
                 0,
                 "Example",
@@ -42,7 +41,8 @@ private fun DefaultTaskDetailsContent() {
                 Instant.now(),
                 Category(0, "Учеба"),
                 Priority(0, "Important", "#FFD130")
-            )
+            ),
+            onBackClick = {}
         )
     }
 }
@@ -121,7 +121,11 @@ fun TaskDetailsContent(task: Task) {
         ) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = Icons.Outlined.WatchLater, contentDescription = null)
+                Icon(
+                    imageVector = Icons.Outlined.WatchLater,
+                    contentDescription = null,
+                    tint = TextShadeColor
+                )
                 Text(
                     text = stringResource(
                         id = R.string.task_details_deadline,

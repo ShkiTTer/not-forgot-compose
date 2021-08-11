@@ -36,4 +36,13 @@
     <string name="task_details_done">Выполнено</string>
     <string name="task_details_undone">Не выполнено</string>
     <string name="task_details_deadline">До %s</string>
+
+    <!-- Create Task -->
+    <string name="create_task_title">Добавить заметку</string>
+    <string name="create_task_edit_title">Изменить заметку</string>
+    <string name="create_task_task_title">Заголовок</string>
+    <string name="create_task_task_description">Описание</string>
+    <string name="create_task_task_deadline">Срок</string>
+    <string name="create_task_task_category">Категория</string>
+    <string name="create_task_task_priority">Приоритет</string>
 </resources>
