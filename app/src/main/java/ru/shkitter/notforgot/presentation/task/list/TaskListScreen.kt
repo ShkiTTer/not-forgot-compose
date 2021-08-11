@@ -2,7 +2,9 @@ package ru.shkitter.notforgot.presentation.task.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
@@ -17,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -28,6 +31,8 @@ import ru.shkitter.notforgot.presentation.common.components.AppSnackbar
 import ru.shkitter.notforgot.presentation.common.components.BaseTopAppBar
 import ru.shkitter.notforgot.presentation.common.components.ContentStateBox
 import ru.shkitter.notforgot.presentation.common.theme.BgMain
+import ru.shkitter.notforgot.presentation.task.list.items.TaskListCategoryItem
+import ru.shkitter.notforgot.presentation.task.list.items.TaskListTaskItem
 
 @Preview(showBackground = true, showSystemUi = true, device = Devices.PIXEL_3)
 @Composable
@@ -58,7 +63,7 @@ fun TaskListScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BgMain)
-                .systemBarsPadding()
+                .navigationBarsPadding()
         )
 
         AppSnackbar(
@@ -70,15 +75,36 @@ fun TaskListScreen() {
 
 @Composable
 fun TaskListContent(viewModel: TaskListViewModel) {
-    val tasks by viewModel.tasks.observeAsState(initial = mapOf())
+    val tasksData by viewModel.tasks.observeAsState(initial = mapOf())
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = rememberInsetsPaddingValues(insets = LocalWindowInsets.current.navigationBars)
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.navigationBars,
+            additionalStart = 16.dp,
+            additionalEnd = 16.dp,
+            additionalTop = 16.dp
+        )
     ) {
-        tasks.forEach { category, tasks ->
+        tasksData.forEach { (category, tasks) ->
             item {
+                TaskListCategoryItem(
+                    category = category,
+                    modifier = Modifier.padding(
+                        top = if (category == tasksData.keys.first()) 0.dp else 28.dp,
+                        bottom = 8.dp
+                    )
+                )
+            }
 
+            items(tasks) { task ->
+                TaskListTaskItem(
+                    task = task,
+                    onCheckedChanged = { isChecked ->
+                        viewModel.onTaskDoneChanged(task.id, isChecked)
+                    },
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
             }
         }
     }

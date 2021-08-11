@@ -19,6 +19,16 @@ class TaskListViewModel(
     private val _tasks = MutableLiveData<Map<Category, List<Task>>>()
     val tasks = _tasks.asLiveData()
 
+    private val taskList = mutableListOf<Task>()
+
+    init {
+        fetchTasks()
+    }
+
+    private fun initGroupedTasks() {
+        _tasks.value = taskList.groupBy { it.category }
+    }
+
     fun fetchTasks() {
         viewModelScope.launch {
             getTaskListUseCase()
@@ -26,11 +36,22 @@ class TaskListViewModel(
                 .collect { result ->
                     result
                         .onSuccess { data ->
-                            _tasks.value = data.groupBy { it.category }
+                            taskList.apply {
+                                clear()
+                                addAll(data)
+                            }
+                            initGroupedTasks()
                             _contentState.value = ContentState.Content
                         }
                         .onFailure {}
                 }
         }
+    }
+
+    fun onTaskDoneChanged(taskId: Int, done: Boolean) {
+        val task = taskList.find { it.id == taskId } ?: return
+        val taskPosition = taskList.indexOf(task)
+        taskList[taskPosition] = task.copy(done = done)
+        initGroupedTasks()
     }
 }

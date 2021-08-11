@@ -53,7 +53,7 @@ private fun UncheckedTaskListTaskItem() {
             Priority(0, "", "#FFD130")
         ),
         onCheckedChanged = {},
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
     )
 }
 
@@ -63,14 +63,15 @@ fun TaskListTaskItem(
     onCheckedChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val backgroundModifier = Modifier
+        .background(
+            color = Color.parse(task.priority.color),
+            shape = MaterialTheme.shapes.medium
+        )
+        .padding(horizontal = 16.dp, vertical = 12.dp)
+
     Box(
-        modifier = Modifier
-            .background(
-                color = Color.parse(task.priority.color),
-                shape = MaterialTheme.shapes.medium
-            )
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .then(modifier)
+        modifier = modifier.then(backgroundModifier)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
