@@ -5,9 +5,14 @@ import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import ru.shkitter.notforgot.presentation.auth.login.LoginViewModel
 import ru.shkitter.notforgot.presentation.auth.registration.RegistrationViewModel
+import ru.shkitter.notforgot.presentation.splash.SplashViewModel
 import ru.shkitter.notforgot.presentation.task.list.TaskListViewModel
 
 private val authModule = module {
+    viewModel {
+        SplashViewModel(isUserLoggedUseCase = get())
+    }
+
     viewModel {
         LoginViewModel(
             loginUseCase = get(),

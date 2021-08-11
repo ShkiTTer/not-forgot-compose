@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import org.koin.androidx.compose.getViewModel
 import ru.shkitter.notforgot.R
 import ru.shkitter.notforgot.presentation.common.theme.BgBlack
 import ru.shkitter.notforgot.presentation.common.theme.TextWhite
@@ -28,13 +29,13 @@ private fun DefaultSplashScreen() {
 }
 
 @Composable
-fun SplashScreen(onShown: () -> Unit) {
-
+fun SplashScreen(onShown: (Boolean) -> Unit) {
+    val viewModel = getViewModel<SplashViewModel>()
     val currentOnTimeout by rememberUpdatedState(onShown)
 
     LaunchedEffect(true) {
         delay(2000)
-        currentOnTimeout()
+        currentOnTimeout(viewModel.checkUserLogged())
     }
 
     Surface(color = BgBlack) {
@@ -45,7 +46,6 @@ fun SplashScreen(onShown: () -> Unit) {
         ) {
             Spacer(
                 Modifier
-                    .fillMaxWidth()
                     .height(176.dp)
             )
 
@@ -57,7 +57,6 @@ fun SplashScreen(onShown: () -> Unit) {
 
             Spacer(
                 Modifier
-                    .fillMaxWidth()
                     .height(106.dp)
             )
 

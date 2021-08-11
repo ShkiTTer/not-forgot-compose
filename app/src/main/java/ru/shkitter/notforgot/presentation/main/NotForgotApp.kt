@@ -18,9 +18,9 @@ fun NotForgotApp() {
     NavHost(navController = navController, startDestination = Screen.Splash.route) {
 
         composable(Screen.Splash.route) {
-            SplashScreen {
+            SplashScreen { isUserLogged ->
                 navController.popBackStack()
-                navController.navigate(Screen.Login.route)
+                navController.navigate(if (isUserLogged) Screen.TaskList.route else Screen.Login.route)
             }
         }
 
@@ -54,7 +54,7 @@ fun NotForgotApp() {
                 onRegisterSucceeded = {
                     navController.popBackStack()
                     navController.navigate(Screen.TaskList.route) {
-                        popUpTo(Screen.Login.route) {inclusive = true}
+                        popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 }
             )
