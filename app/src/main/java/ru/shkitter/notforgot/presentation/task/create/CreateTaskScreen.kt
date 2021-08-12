@@ -5,8 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AddBox
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
@@ -15,6 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 import ru.shkitter.domain.task.model.Category
@@ -22,23 +29,27 @@ import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.R
 import ru.shkitter.notforgot.presentation.common.components.AppFilledTextField
 import ru.shkitter.notforgot.presentation.common.components.BaseTopAppBar
-import ru.shkitter.notforgot.presentation.common.theme.NotForgotTheme
+import ru.shkitter.notforgot.presentation.common.theme.*
+import ru.shkitter.notforgot.presentation.common.utils.DateFormattingUtils
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Preview(showSystemUi = true, showBackground = true, device = Devices.PIXEL_3)
 @Composable
 private fun DefaultCreateTaskScreen() {
     NotForgotTheme {
-        Surface {
-            CreateTaskContent(
-                title = "",
-                onTitleChanged = {},
-                description = "",
-                onDescriptionChanged = {},
-                categories = listOf(),
-                selectedCategory = null,
-                onCategorySelect = {}
-            )
-        }
+        CreateTaskContent(
+            title = "",
+            onTitleChanged = {},
+            description = "",
+            onDescriptionChanged = {},
+            categories = listOf(),
+            selectedCategory = null,
+            onCategorySelect = {},
+            deadline = null,
+            onDeadLineSelectClick = {}
+        )
     }
 }
 
@@ -53,6 +64,12 @@ fun CreateTaskScreen(task: Task?, onBackClick: () -> Unit) {
     val description by viewModel.description.observeAsState(task?.description.orEmpty())
     val categories by viewModel.categories.observeAsState(listOf())
     val selectedCategory by viewModel.selectedCategory.observeAsState()
+    val selectedDeadline by viewModel.selectedDeadline.observeAsState()
+
+    val deadLinePickerDialog = buildDatePickerDialog(
+        date = selectedDeadline,
+        onDateSelected = viewModel::onDeadlineSelected
+    )
 
     Scaffold(scaffoldState = scaffoldState,
         topBar = {
@@ -61,17 +78,19 @@ fun CreateTaskScreen(task: Task?, onBackClick: () -> Unit) {
                 onBackClick = onBackClick
             )
         }) {
-        Surface {
-            CreateTaskContent(
-                title = title,
-                onTitleChanged = viewModel::onTitleChanged,
-                description = description,
-                onDescriptionChanged = viewModel::onDescriptionChanged,
-                categories = categories,
-                selectedCategory = selectedCategory,
-                onCategorySelect = viewModel::onCategorySelected
-            )
-        }
+        CreateTaskContent(
+            title = title,
+            onTitleChanged = viewModel::onTitleChanged,
+            description = description,
+            onDescriptionChanged = viewModel::onDescriptionChanged,
+            categories = categories,
+            selectedCategory = selectedCategory,
+            onCategorySelect = viewModel::onCategorySelected,
+            deadline = selectedDeadline,
+            onDeadLineSelectClick = {
+                deadLinePickerDialog.show()
+            }
+        )
     }
 }
 
@@ -84,31 +103,22 @@ private fun CreateTaskContent(
     categories: List<Category>,
     selectedCategory: Category?,
     onCategorySelect: (Category) -> Unit,
+    deadline: Instant?,
+    onDeadLineSelectClick: () -> Unit
 ) {
-    var categoryExpanded by remember { mutableStateOf(false) }
-    var dropDownWidth by remember { mutableStateOf(0) }
-
     Column(
         modifier = Modifier
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        Text(
-            text = stringResource(id = R.string.create_task_task_title),
-            color = Color.Black,
-            style = MaterialTheme.typography.h4
-        )
-
         Spacer(modifier = Modifier.height(16.dp))
 
         AppFilledTextField(
             value = title,
             onValueChange = onTitleChanged,
-            placeholder = stringResource(id = R.string.create_task_task_title),
+            label = stringResource(id = R.string.create_task_task_title),
             modifier = Modifier.fillMaxWidth(),
-            backgroundColor = Color.Transparent
         )
-
         Spacer(modifier = Modifier.height(24.dp))
 
         AppFilledTextField(
@@ -117,49 +127,167 @@ private fun CreateTaskContent(
             label = stringResource(id = R.string.create_task_task_description),
             modifier = Modifier.fillMaxWidth()
         )
-
         Spacer(modifier = Modifier.height(24.dp))
 
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Column {
-                AppFilledTextField(
-                    value = selectedCategory?.name.orEmpty(),
-                    onValueChange = {},
-                    enabled = false,
-                    placeholder = stringResource(id = R.string.create_task_task_category),
-                    modifier = Modifier
-                        .clickable {
-                            categoryExpanded = true
-                        }
-                        .onSizeChanged { size ->
-                            dropDownWidth = size.width
-                        }
-                )
+        DeadlineField(deadline = deadline, onDeadLineSelectClick = onDeadLineSelectClick)
+        Spacer(modifier = Modifier.height(24.dp))
 
-                DropdownMenu(
-                    expanded = categoryExpanded,
-                    onDismissRequest = { categoryExpanded = false },
-                    modifier = Modifier
-                        .width(with(LocalDensity.current) { dropDownWidth.toDp() })
-                        .height(250.dp)
-                ) {
-                    categories.forEach { category ->
-                        DropdownMenuItem(onClick = {
-                            onCategorySelect.invoke(category)
-                            categoryExpanded = false
-                        }) {
-                            Text(
-                                text = category.name,
-                                style = if (selectedCategory == category) {
-                                    MaterialTheme.typography.h4
-                                } else {
-                                    MaterialTheme.typography.h5
-                                }
-                            )
-                        }
+        CategorySelect(
+            categories = categories,
+            selectedCategory = selectedCategory,
+            onCategorySelect = onCategorySelect
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun CategorySelect(
+    categories: List<Category>,
+    selectedCategory: Category?,
+    onCategorySelect: (Category) -> Unit,
+) {
+    var categoryExpanded by remember { mutableStateOf(false) }
+    var dropDownWidth by remember { mutableStateOf(0) }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
+            AppFilledTextField(
+                value = selectedCategory?.name.orEmpty(),
+                onValueChange = {},
+                enabled = false,
+                placeholder = stringResource(id = R.string.create_task_task_category),
+                colors = TextFieldDefaults.textFieldColors(
+                    disabledTextColor = TextBlackColor,
+                    disabledPlaceholderColor = TextGrayColor,
+                    disabledIndicatorColor = BgGrayColor,
+                    backgroundColor = BgTextField
+                ),
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .fillMaxWidth()
+                    .clickable {
+                        categoryExpanded = true
+                    }
+                    .onSizeChanged { size ->
+                        dropDownWidth = size.width
+                    }
+            )
+
+            DropdownMenu(
+                expanded = categoryExpanded,
+                onDismissRequest = { categoryExpanded = false },
+                modifier = Modifier
+                    .width(with(LocalDensity.current) { dropDownWidth.toDp() })
+                    .height(250.dp)
+            ) {
+                categories.forEach { category ->
+                    DropdownMenuItem(onClick = {
+                        onCategorySelect.invoke(category)
+                        categoryExpanded = false
+                    }) {
+                        Text(
+                            text = category.name,
+                            style = if (selectedCategory == category) {
+                                MaterialTheme.typography.h4
+                            } else {
+                                MaterialTheme.typography.h5
+                            }
+                        )
                     }
                 }
             }
         }
+
+        Icon(
+            imageVector = Icons.Outlined.AddBox,
+            contentDescription = null,
+            tint = Color.Black.copy(alpha = 0.5f)
+        )
     }
+}
+
+@Composable
+private fun DeadlineField(deadline: Instant?, onDeadLineSelectClick: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
+            AppFilledTextField(
+                value = deadline?.let { DateFormattingUtils.getFullDigitDate(it) }.orEmpty(),
+                onValueChange = {},
+                placeholder = stringResource(id = R.string.create_task_task_deadline),
+                enabled = false,
+                colors = TextFieldDefaults.textFieldColors(
+                    disabledTextColor = TextBlackColor,
+                    disabledPlaceholderColor = TextGrayColor,
+                    disabledIndicatorColor = BgGrayColor,
+                    backgroundColor = Color.Transparent
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        Icon(
+            imageVector = Icons.Outlined.DateRange,
+            contentDescription = null,
+            tint = Color.Black.copy(alpha = 0.5f),
+            modifier = Modifier.clickable { onDeadLineSelectClick.invoke() }
+        )
+    }
+}
+
+@Composable
+private fun buildDatePickerDialog(
+    date: Instant?,
+    onDateSelected: (Instant) -> Unit
+): MaterialDialog {
+    val dialog = remember { MaterialDialog() }
+
+    var selectedDate by remember {
+        mutableStateOf(
+            date?.atZone(ZoneId.systemDefault())?.toLocalDate() ?: LocalDate.now()
+        )
+    }
+
+    dialog.build(
+        buttons = {
+            positiveButton(
+                text = stringResource(id = R.string.common_ok),
+                onClick = {
+                    val instant = selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
+                    onDateSelected.invoke(instant)
+                })
+            negativeButton(text = stringResource(id = R.string.common_cancel))
+        }) {
+        datepicker(
+            initialDate = selectedDate,
+            colors = DatePickerDefaults.colors(
+                headerBackgroundColor = BgBlackColor,
+                headerTextColor = Color.White,
+                activeBackgroundColor = BgBlackColor,
+                activeTextColor = Color.White,
+                inactiveTextColor = TextBlackColor
+            )
+        ) { pickedDate ->
+            selectedDate = pickedDate
+        }
+    }
+
+    return dialog
 }

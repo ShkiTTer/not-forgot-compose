@@ -8,6 +8,8 @@
     <string name="common_sign_in">Войти</string>
     <string name="common_email">Электронная почта</string>
     <string name="common_password">Пароль</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_ok">OK</string>
 
     <!-- Error -->
     <string name="error_empty">Заполните поле</string>
@@ -42,7 +44,7 @@
     <string name="create_task_edit_title">Изменить заметку</string>
     <string name="create_task_task_title">Заголовок</string>
     <string name="create_task_task_description">Описание</string>
-    <string name="create_task_task_deadline">Срок</string>
+    <string name="create_task_task_deadline">Срок выполнения задачи</string>
     <string name="create_task_task_category">Категория</string>
     <string name="create_task_task_priority">Приоритет</string>
 </resources>

@@ -9,6 +9,7 @@ import ru.shkitter.domain.task.model.Category
 import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.presentation.common.extensions.asLiveData
 import ru.shkitter.notforgot.presentation.common.state.StateViewModel
+import java.time.Instant
 
 class CreateTaskViewModel(
     private val task: Task?,
@@ -27,6 +28,9 @@ class CreateTaskViewModel(
     private val _selectedCategory = MutableLiveData<Category>()
     val selectedCategory = _selectedCategory.asLiveData()
 
+    private val _selectedDeadline = MutableLiveData<Instant?>()
+    val selectedDeadline = _selectedDeadline.asLiveData()
+
     init {
         fetchCreateTaskData()
     }
@@ -39,7 +43,7 @@ class CreateTaskViewModel(
                         .onSuccess { data ->
                             _categories.value = data.categories
                         }
-                        .onFailure {  }
+                        .onFailure { }
                 }
         }
     }
@@ -54,5 +58,9 @@ class CreateTaskViewModel(
 
     fun onCategorySelected(value: Category) {
         _selectedCategory.value = value
+    }
+
+    fun onDeadlineSelected(value: Instant) {
+        _selectedDeadline.value = value
     }
 }

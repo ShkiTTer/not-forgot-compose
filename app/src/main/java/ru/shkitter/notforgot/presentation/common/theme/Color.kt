@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 val BgMainColor = Color(0xFFFAFAFA)
 val BgBlackColor = Color(0xFF292929)
 val BgGrayColor = Color(0xFF9B9B9B)
-val BgTextField = Color(0x06F3F3F3)
+val BgTextField = Color(0x06333333)
 
 val TextWhiteColor = Color(0xFFF7F7F7)
 val TextBlackColor = Color(0xFF202020)

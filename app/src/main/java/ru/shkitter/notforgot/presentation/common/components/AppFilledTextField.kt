@@ -3,10 +3,7 @@ package ru.shkitter.notforgot.presentation.common.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,7 +39,16 @@ fun AppFilledTextField(
     label: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = BgTextField,
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(
+        focusedLabelColor = AccentBlueColor,
+        cursorColor = BgBlackColor,
+        textColor = TextBlackColor,
+        unfocusedLabelColor = TextGrayColor,
+        focusedIndicatorColor = AccentBlueColor,
+        unfocusedIndicatorColor = BgGrayColor,
+        placeholderColor = TextGrayColor,
+        backgroundColor = BgTextField
+    ),
     error: String? = null,
     singleLine: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -63,15 +69,7 @@ fun AppFilledTextField(
             label = {
                 Text(text = label, style = MaterialTheme.typography.caption)
             },
-            colors = TextFieldDefaults.textFieldColors(
-                focusedLabelColor = AccentBlueColor,
-                cursorColor = BgBlackColor,
-                textColor = TextBlackColor,
-                unfocusedLabelColor = TextGrayColor,
-                focusedIndicatorColor = AccentBlueColor,
-                unfocusedIndicatorColor = BgGrayColor,
-                backgroundColor = backgroundColor
-            )
+            colors = colors
         )
 
         if (!error.isNullOrEmpty()) {
@@ -92,7 +90,16 @@ fun AppFilledTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = BgTextField,
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(
+        focusedLabelColor = AccentBlueColor,
+        cursorColor = BgBlackColor,
+        textColor = TextBlackColor,
+        unfocusedLabelColor = TextGrayColor,
+        focusedIndicatorColor = AccentBlueColor,
+        unfocusedIndicatorColor = BgGrayColor,
+        placeholderColor = TextGrayColor,
+        backgroundColor = BgTextField
+    ),
     error: String? = null,
     singleLine: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -113,16 +120,7 @@ fun AppFilledTextField(
             placeholder = {
                 Text(text = placeholder, style = MaterialTheme.typography.body1)
             },
-            colors = TextFieldDefaults.textFieldColors(
-                focusedLabelColor = AccentBlueColor,
-                cursorColor = BgBlackColor,
-                textColor = TextBlackColor,
-                unfocusedLabelColor = TextGrayColor,
-                focusedIndicatorColor = AccentBlueColor,
-                unfocusedIndicatorColor = BgGrayColor,
-                placeholderColor = TextGrayColor,
-                backgroundColor = backgroundColor
-            )
+            colors = colors
         )
 
         if (!error.isNullOrEmpty()) {
