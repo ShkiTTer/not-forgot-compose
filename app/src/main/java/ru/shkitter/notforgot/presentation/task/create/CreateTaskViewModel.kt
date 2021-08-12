@@ -1,11 +1,20 @@
 package ru.shkitter.notforgot.presentation.task.create
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import ru.shkitter.domain.task.GetCreateTaskDataUseCase
 import ru.shkitter.domain.task.model.Category
+import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.presentation.common.extensions.asLiveData
 import ru.shkitter.notforgot.presentation.common.state.StateViewModel
 
-class CreateTaskViewModel : StateViewModel<Unit>() {
+class CreateTaskViewModel(
+    private val task: Task?,
+    private val getCreateTaskDataUseCase: GetCreateTaskDataUseCase
+) : StateViewModel<Unit>() {
+
     private val _title = MutableLiveData<String>()
     val title = _title.asLiveData()
 
@@ -15,11 +24,35 @@ class CreateTaskViewModel : StateViewModel<Unit>() {
     private val _categories = MutableLiveData<List<Category>>()
     val categories = _categories.asLiveData()
 
+    private val _selectedCategory = MutableLiveData<Category>()
+    val selectedCategory = _selectedCategory.asLiveData()
+
+    init {
+        fetchCreateTaskData()
+    }
+
+    fun fetchCreateTaskData() {
+        viewModelScope.launch {
+            getCreateTaskDataUseCase()
+                .collect { result ->
+                    result
+                        .onSuccess { data ->
+                            _categories.value = data.categories
+                        }
+                        .onFailure {  }
+                }
+        }
+    }
+
     fun onTitleChanged(value: String) {
         _title.value = value
     }
 
     fun onDescriptionChanged(value: String) {
         _description.value = value
+    }
+
+    fun onCategorySelected(value: Category) {
+        _selectedCategory.value = value
     }
 }

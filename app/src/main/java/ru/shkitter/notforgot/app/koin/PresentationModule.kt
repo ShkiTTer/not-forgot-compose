@@ -3,6 +3,7 @@ package ru.shkitter.notforgot.app.koin
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
+import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.presentation.auth.login.LoginViewModel
 import ru.shkitter.notforgot.presentation.auth.registration.RegistrationViewModel
 import ru.shkitter.notforgot.presentation.splash.SplashViewModel
@@ -35,8 +36,11 @@ private val taskModule = module {
         TaskListViewModel(getTaskListUseCase = get())
     }
 
-    viewModel {
-        CreateTaskViewModel()
+    viewModel { (task: Task) ->
+        CreateTaskViewModel(
+            task = task,
+            getCreateTaskDataUseCase = get()
+        )
     }
 }
 

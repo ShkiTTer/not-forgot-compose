@@ -14,9 +14,7 @@ import ru.shkitter.data.net.task.TaskApi
 import ru.shkitter.data.net.task.TaskDataSourceImpl
 import ru.shkitter.domain.auth.*
 import ru.shkitter.domain.session.*
-import ru.shkitter.domain.task.GetTaskListUseCase
-import ru.shkitter.domain.task.GetTaskListUseCaseImpl
-import ru.shkitter.domain.task.TaskDataSource
+import ru.shkitter.domain.task.*
 import ru.shkitter.domain.validation.ValidationUseCase
 import ru.shkitter.domain.validation.ValidationUseCaseImpl
 import ru.shkitter.notforgot.BuildConfig
@@ -59,6 +57,7 @@ object KoinModules {
         factory<GetCurrentTokenUseCase> { GetCurrentTokenUseCaseImpl(sessionDataSource = get()) }
         factory<GetTaskListUseCase> { GetTaskListUseCaseImpl(taskDataSource = get()) }
         factory<IsUserLoggedUseCase> { IsUserLoggedUseCaseImpl(sessionDataSource = get()) }
+        factory<GetCreateTaskDataUseCase> { GetCreateTaskDataUseCaseImpl(taskDataSource = get()) }
     }
 
     private val baseModule = module {

@@ -1,5 +1,6 @@
 package ru.shkitter.notforgot.presentation.task.create
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,11 +9,14 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 import ru.shkitter.domain.task.model.Category
 import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.R
@@ -30,7 +34,9 @@ private fun DefaultCreateTaskScreen() {
                 onTitleChanged = {},
                 description = "",
                 onDescriptionChanged = {},
-                categories = listOf()
+                categories = listOf(),
+                selectedCategory = null,
+                onCategorySelect = {}
             )
         }
     }
@@ -39,11 +45,14 @@ private fun DefaultCreateTaskScreen() {
 @Composable
 fun CreateTaskScreen(task: Task?, onBackClick: () -> Unit) {
     val scaffoldState = rememberScaffoldState()
-    val viewModel = getViewModel<CreateTaskViewModel>()
+    val viewModel = getViewModel<CreateTaskViewModel> {
+        parametersOf(task)
+    }
 
     val title by viewModel.title.observeAsState(task?.title.orEmpty())
     val description by viewModel.description.observeAsState(task?.description.orEmpty())
     val categories by viewModel.categories.observeAsState(listOf())
+    val selectedCategory by viewModel.selectedCategory.observeAsState()
 
     Scaffold(scaffoldState = scaffoldState,
         topBar = {
@@ -58,7 +67,9 @@ fun CreateTaskScreen(task: Task?, onBackClick: () -> Unit) {
                 onTitleChanged = viewModel::onTitleChanged,
                 description = description,
                 onDescriptionChanged = viewModel::onDescriptionChanged,
-                categories = categories
+                categories = categories,
+                selectedCategory = selectedCategory,
+                onCategorySelect = viewModel::onCategorySelected
             )
         }
     }
@@ -70,9 +81,12 @@ private fun CreateTaskContent(
     onTitleChanged: (String) -> Unit,
     description: String,
     onDescriptionChanged: (String) -> Unit,
-    categories: List<Category>
+    categories: List<Category>,
+    selectedCategory: Category?,
+    onCategorySelect: (Category) -> Unit,
 ) {
     var categoryExpanded by remember { mutableStateOf(false) }
+    var dropDownWidth by remember { mutableStateOf(0) }
 
     Column(
         modifier = Modifier
@@ -106,14 +120,44 @@ private fun CreateTaskContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        DropdownMenu(
-            expanded = categoryExpanded,
-            onDismissRequest = { categoryExpanded = false },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            categories.forEach { category ->
-                DropdownMenuItem(onClick = { categoryExpanded = false }) {
-                    Text(text = category.name)
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Column {
+                AppFilledTextField(
+                    value = selectedCategory?.name.orEmpty(),
+                    onValueChange = {},
+                    enabled = false,
+                    placeholder = stringResource(id = R.string.create_task_task_category),
+                    modifier = Modifier
+                        .clickable {
+                            categoryExpanded = true
+                        }
+                        .onSizeChanged { size ->
+                            dropDownWidth = size.width
+                        }
+                )
+
+                DropdownMenu(
+                    expanded = categoryExpanded,
+                    onDismissRequest = { categoryExpanded = false },
+                    modifier = Modifier
+                        .width(with(LocalDensity.current) { dropDownWidth.toDp() })
+                        .height(250.dp)
+                ) {
+                    categories.forEach { category ->
+                        DropdownMenuItem(onClick = {
+                            onCategorySelect.invoke(category)
+                            categoryExpanded = false
+                        }) {
+                            Text(
+                                text = category.name,
+                                style = if (selectedCategory == category) {
+                                    MaterialTheme.typography.h4
+                                } else {
+                                    MaterialTheme.typography.h5
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }

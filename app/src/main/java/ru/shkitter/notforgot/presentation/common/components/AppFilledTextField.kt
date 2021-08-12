@@ -41,6 +41,7 @@ fun AppFilledTextField(
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     backgroundColor: Color = BgTextField,
     error: String? = null,
     singleLine: Boolean = true,
@@ -56,6 +57,7 @@ fun AppFilledTextField(
             textStyle = MaterialTheme.typography.body1,
             keyboardOptions = keyboardOptions,
             singleLine = singleLine,
+            enabled = enabled,
             isError = !error.isNullOrEmpty(),
             visualTransformation = visualTransformation,
             label = {
@@ -89,6 +91,7 @@ fun AppFilledTextField(
     placeholder: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     backgroundColor: Color = BgTextField,
     error: String? = null,
     singleLine: Boolean = true,
@@ -104,6 +107,7 @@ fun AppFilledTextField(
             textStyle = MaterialTheme.typography.body1,
             keyboardOptions = keyboardOptions,
             singleLine = singleLine,
+            enabled = enabled,
             isError = !error.isNullOrEmpty(),
             visualTransformation = visualTransformation,
             placeholder = {
