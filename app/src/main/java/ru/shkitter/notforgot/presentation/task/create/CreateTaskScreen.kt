@@ -141,7 +141,9 @@ private fun CreateTaskContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(115.dp),
-            singleLine = false
+            singleLine = false,
+            maxLength = 50,
+            showCounter = true
         )
         Spacer(modifier = Modifier.height(24.dp))
 

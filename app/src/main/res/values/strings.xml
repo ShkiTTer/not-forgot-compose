@@ -11,6 +11,7 @@
     <string name="common_cancel">Cancel</string>
     <string name="common_ok">OK</string>
     <string name="common_save">Сохранить</string>
+    <string name="common_counter">%d/%d</string>
 
     <!-- Error -->
     <string name="error_empty">Заполните поле</string>
