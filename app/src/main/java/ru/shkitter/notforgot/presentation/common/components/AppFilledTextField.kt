@@ -82,7 +82,9 @@ fun AppFilledTextField(
     Column {
         TextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = { text ->
+                if (text.length <= maxLength) onValueChange.invoke(text)
+            },
             modifier = modifier,
             textStyle = MaterialTheme.typography.body1,
             keyboardOptions = keyboardOptions,

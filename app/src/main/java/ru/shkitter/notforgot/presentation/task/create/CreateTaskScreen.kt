@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -31,6 +32,7 @@ import ru.shkitter.notforgot.R
 import ru.shkitter.notforgot.presentation.common.components.AppFilledButton
 import ru.shkitter.notforgot.presentation.common.components.AppFilledTextField
 import ru.shkitter.notforgot.presentation.common.components.BaseTopAppBar
+import ru.shkitter.notforgot.presentation.common.components.ContentStateBox
 import ru.shkitter.notforgot.presentation.common.theme.*
 import ru.shkitter.notforgot.presentation.common.utils.DateFormattingUtils
 import java.time.Instant
@@ -53,7 +55,8 @@ private fun DefaultCreateTaskScreen() {
             onDeadLineSelectClick = {},
             priorities = listOf(),
             selectedPriority = null,
-            onPrioritySelected = {}
+            onPrioritySelected = {},
+            onSaveClick = {}
         )
     }
 }
@@ -85,21 +88,29 @@ fun CreateTaskScreen(task: Task?, onBackClick: () -> Unit) {
                 onBackClick = onBackClick
             )
         }) {
-        CreateTaskContent(
-            title = title,
-            onTitleChanged = viewModel::onTitleChanged,
-            description = description,
-            onDescriptionChanged = viewModel::onDescriptionChanged,
-            categories = categories,
-            selectedCategory = selectedCategory,
-            onCategorySelect = viewModel::onCategorySelected,
-            deadline = selectedDeadline,
-            onDeadLineSelectClick = {
-                deadLinePickerDialog.show()
+        ContentStateBox(
+            viewModel = viewModel,
+            content = {
+                CreateTaskContent(
+                    title = title,
+                    onTitleChanged = viewModel::onTitleChanged,
+                    description = description,
+                    onDescriptionChanged = viewModel::onDescriptionChanged,
+                    categories = categories,
+                    selectedCategory = selectedCategory,
+                    onCategorySelect = viewModel::onCategorySelected,
+                    deadline = selectedDeadline,
+                    onDeadLineSelectClick = {
+                        deadLinePickerDialog.show()
+                    },
+                    priorities = priorities,
+                    selectedPriority = selectedPriority,
+                    onPrioritySelected = viewModel::onPrioritySelected,
+                    onSaveClick = viewModel::onSaveTask
+                )
             },
-            priorities = priorities,
-            selectedPriority = selectedPriority,
-            onPrioritySelected = viewModel::onPrioritySelected
+            snackbarHostState = scaffoldState.snackbarHostState,
+            modifier = Modifier.navigationBarsWithImePadding()
         )
     }
 }
@@ -117,7 +128,8 @@ private fun CreateTaskContent(
     onDeadLineSelectClick: () -> Unit,
     priorities: List<Priority>,
     selectedPriority: Priority?,
-    onPrioritySelected: (Priority) -> Unit
+    onPrioritySelected: (Priority) -> Unit,
+    onSaveClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -219,7 +231,7 @@ private fun CategorySelect(
                 onDismissRequest = { categoryExpanded = false },
                 modifier = Modifier
                     .width(with(LocalDensity.current) { dropDownWidth.toDp() })
-                    .height(250.dp)
+                    .heightIn(max = 250.dp)
             ) {
                 categories.forEach { category ->
                     DropdownMenuItem(onClick = {
@@ -316,7 +328,7 @@ private fun PrioritySelect(
             onDismissRequest = { priorityExpanded.value = false },
             modifier = Modifier
                 .width(with(LocalDensity.current) { dropDownWidth.value.toDp() })
-                .height(250.dp)
+                .heightIn(max = 250.dp)
         ) {
 
             priorities.forEach { priority ->

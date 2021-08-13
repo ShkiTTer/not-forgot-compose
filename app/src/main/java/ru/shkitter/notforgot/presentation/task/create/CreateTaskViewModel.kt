@@ -3,18 +3,23 @@ package ru.shkitter.notforgot.presentation.task.create
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import ru.shkitter.domain.task.CreateTaskUseCase
 import ru.shkitter.domain.task.GetCreateTaskDataUseCase
 import ru.shkitter.domain.task.model.Category
+import ru.shkitter.domain.task.model.CreateTaskParams
 import ru.shkitter.domain.task.model.Priority
 import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.presentation.common.extensions.asLiveData
+import ru.shkitter.notforgot.presentation.common.state.ContentState
 import ru.shkitter.notforgot.presentation.common.state.StateViewModel
 import java.time.Instant
 
 class CreateTaskViewModel(
     private val task: Task?,
-    private val getCreateTaskDataUseCase: GetCreateTaskDataUseCase
+    private val getCreateTaskDataUseCase: GetCreateTaskDataUseCase,
+    private val createTaskUseCase: CreateTaskUseCase
 ) : StateViewModel<Unit>() {
 
     private val _title = MutableLiveData(task?.title.orEmpty())
@@ -45,13 +50,45 @@ class CreateTaskViewModel(
     fun fetchCreateTaskData() {
         viewModelScope.launch {
             getCreateTaskDataUseCase()
+                .onStart { _contentState.value = ContentState.Loading }
                 .collect { result ->
                     result
                         .onSuccess { data ->
+                            _contentState.value = ContentState.Content
                             _categories.value = data.categories
                             _priorities.value = data.priorities
                         }
                         .onFailure { }
+                }
+        }
+    }
+
+    fun onSaveTask() {
+
+    }
+
+    private fun createTask() {
+        viewModelScope.launch {
+            val localTitle = title.value.orEmpty()
+            val localDescription = description.value.orEmpty()
+            val localDeadline = selectedDeadline.value ?: return@launch
+            val category = selectedCategory.value ?: return@launch
+            val priority = selectedPriority.value ?: return@launch
+
+            val params = CreateTaskParams(
+                title = localTitle,
+                description = localDescription,
+                done = false,
+                deadline = localDeadline,
+                categoryId = category.id,
+                priorityId = priority.id
+            )
+
+            createTaskUseCase(params)
+                .collect { result ->
+                    result
+                        .onSuccess {  }
+                        .onFailure {  }
                 }
         }
     }

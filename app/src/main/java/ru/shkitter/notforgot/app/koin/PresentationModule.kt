@@ -39,7 +39,8 @@ private val taskModule = module {
     viewModel { (task: Task) ->
         CreateTaskViewModel(
             task = task,
-            getCreateTaskDataUseCase = get()
+            getCreateTaskDataUseCase = get(),
+            createTaskUseCase = get()
         )
     }
 }

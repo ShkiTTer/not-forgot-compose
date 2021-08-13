@@ -58,6 +58,7 @@ object KoinModules {
         factory<GetTaskListUseCase> { GetTaskListUseCaseImpl(taskDataSource = get()) }
         factory<IsUserLoggedUseCase> { IsUserLoggedUseCaseImpl(sessionDataSource = get()) }
         factory<GetCreateTaskDataUseCase> { GetCreateTaskDataUseCaseImpl(taskDataSource = get()) }
+        factory<CreateTaskUseCase> { CreateTaskUseCaseImpl(taskDataSource = get()) }
     }
 
     private val baseModule = module {
