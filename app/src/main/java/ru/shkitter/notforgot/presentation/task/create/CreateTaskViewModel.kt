@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.shkitter.domain.task.GetCreateTaskDataUseCase
 import ru.shkitter.domain.task.model.Category
+import ru.shkitter.domain.task.model.Priority
 import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.presentation.common.extensions.asLiveData
 import ru.shkitter.notforgot.presentation.common.state.StateViewModel
@@ -25,8 +26,14 @@ class CreateTaskViewModel(
     private val _categories = MutableLiveData<List<Category>>()
     val categories = _categories.asLiveData()
 
-    private val _selectedCategory = MutableLiveData<Category>()
+    private val _priorities = MutableLiveData<List<Priority>>()
+    val priorities = _priorities.asLiveData()
+
+    private val _selectedCategory = MutableLiveData<Category?>()
     val selectedCategory = _selectedCategory.asLiveData()
+
+    private val _selectedPriority = MutableLiveData<Priority?>()
+    val selectedPriority = _selectedPriority.asLiveData()
 
     private val _selectedDeadline = MutableLiveData<Instant?>()
     val selectedDeadline = _selectedDeadline.asLiveData()
@@ -42,6 +49,7 @@ class CreateTaskViewModel(
                     result
                         .onSuccess { data ->
                             _categories.value = data.categories
+                            _priorities.value = data.priorities
                         }
                         .onFailure { }
                 }
@@ -62,5 +70,9 @@ class CreateTaskViewModel(
 
     fun onDeadlineSelected(value: Instant) {
         _selectedDeadline.value = value
+    }
+
+    fun onPrioritySelected(value: Priority) {
+        _selectedPriority.value = value
     }
 }

@@ -52,7 +52,8 @@ fun AppFilledTextField(
     error: String? = null,
     singleLine: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    maxLines: Int = Int.MAX_VALUE
 ) {
 
     Column {
@@ -69,7 +70,8 @@ fun AppFilledTextField(
             label = {
                 Text(text = label, style = MaterialTheme.typography.caption)
             },
-            colors = colors
+            colors = colors,
+            maxLines = maxLines
         )
 
         if (!error.isNullOrEmpty()) {
@@ -103,7 +105,8 @@ fun AppFilledTextField(
     error: String? = null,
     singleLine: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    maxLines: Int = Int.MAX_VALUE
 ) {
 
     Column {
@@ -120,7 +123,8 @@ fun AppFilledTextField(
             placeholder = {
                 Text(text = placeholder, style = MaterialTheme.typography.body1)
             },
-            colors = colors
+            colors = colors,
+            maxLines = maxLines
         )
 
         if (!error.isNullOrEmpty()) {

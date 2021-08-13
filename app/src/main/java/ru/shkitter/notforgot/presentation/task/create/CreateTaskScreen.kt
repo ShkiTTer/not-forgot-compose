@@ -25,6 +25,7 @@ import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 import ru.shkitter.domain.task.model.Category
+import ru.shkitter.domain.task.model.Priority
 import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.R
 import ru.shkitter.notforgot.presentation.common.components.AppFilledTextField
@@ -48,7 +49,10 @@ private fun DefaultCreateTaskScreen() {
             selectedCategory = null,
             onCategorySelect = {},
             deadline = null,
-            onDeadLineSelectClick = {}
+            onDeadLineSelectClick = {},
+            priorities = listOf(),
+            selectedPriority = null,
+            onPrioritySelected = {}
         )
     }
 }
@@ -63,8 +67,10 @@ fun CreateTaskScreen(task: Task?, onBackClick: () -> Unit) {
     val title by viewModel.title.observeAsState(task?.title.orEmpty())
     val description by viewModel.description.observeAsState(task?.description.orEmpty())
     val categories by viewModel.categories.observeAsState(listOf())
+    val priorities by viewModel.priorities.observeAsState(listOf())
     val selectedCategory by viewModel.selectedCategory.observeAsState()
     val selectedDeadline by viewModel.selectedDeadline.observeAsState()
+    val selectedPriority by viewModel.selectedPriority.observeAsState()
 
     val deadLinePickerDialog = buildDatePickerDialog(
         date = selectedDeadline,
@@ -89,7 +95,10 @@ fun CreateTaskScreen(task: Task?, onBackClick: () -> Unit) {
             deadline = selectedDeadline,
             onDeadLineSelectClick = {
                 deadLinePickerDialog.show()
-            }
+            },
+            priorities = priorities,
+            selectedPriority = selectedPriority,
+            onPrioritySelected = viewModel::onPrioritySelected
         )
     }
 }
@@ -104,7 +113,10 @@ private fun CreateTaskContent(
     selectedCategory: Category?,
     onCategorySelect: (Category) -> Unit,
     deadline: Instant?,
-    onDeadLineSelectClick: () -> Unit
+    onDeadLineSelectClick: () -> Unit,
+    priorities: List<Priority>,
+    selectedPriority: Priority?,
+    onPrioritySelected: (Priority) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -117,7 +129,7 @@ private fun CreateTaskContent(
             value = title,
             onValueChange = onTitleChanged,
             label = stringResource(id = R.string.create_task_task_title),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -125,7 +137,10 @@ private fun CreateTaskContent(
             value = description,
             onValueChange = onDescriptionChanged,
             label = stringResource(id = R.string.create_task_task_description),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(115.dp),
+            singleLine = false
         )
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -138,6 +153,12 @@ private fun CreateTaskContent(
             onCategorySelect = onCategorySelect
         )
         Spacer(modifier = Modifier.height(24.dp))
+
+        PrioritySelect(
+            priorities = priorities,
+            selectedPriority = selectedPriority,
+            onPrioritySelected = onPrioritySelected
+        )
     }
 }
 
@@ -249,6 +270,63 @@ private fun DeadlineField(deadline: Instant?, onDeadLineSelectClick: () -> Unit)
             tint = Color.Black.copy(alpha = 0.5f),
             modifier = Modifier.clickable { onDeadLineSelectClick.invoke() }
         )
+    }
+}
+
+@Composable
+private fun PrioritySelect(
+    priorities: List<Priority>,
+    selectedPriority: Priority?,
+    onPrioritySelected: (Priority) -> Unit
+) {
+    val priorityExpanded = remember { mutableStateOf(false) }
+    val dropDownWidth = remember { mutableStateOf(0) }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        AppFilledTextField(
+            value = selectedPriority?.name.orEmpty(),
+            onValueChange = {},
+            placeholder = stringResource(id = R.string.create_task_task_priority),
+            enabled = false,
+            colors = TextFieldDefaults.textFieldColors(
+                disabledTextColor = TextBlackColor,
+                disabledPlaceholderColor = TextGrayColor,
+                disabledIndicatorColor = BgGrayColor,
+                backgroundColor = BgTextField
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .onSizeChanged { size -> dropDownWidth.value = size.width }
+                .clickable { priorityExpanded.value = true }
+        )
+
+        DropdownMenu(
+            expanded = priorityExpanded.value,
+            onDismissRequest = { priorityExpanded.value = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current) { dropDownWidth.value.toDp() })
+                .height(250.dp)
+        ) {
+
+            priorities.forEach { priority ->
+
+                DropdownMenuItem(
+                    onClick = {
+                        priorityExpanded.value = false
+                        onPrioritySelected.invoke(priority)
+                    }) {
+
+                    Text(
+                        text = priority.name,
+                        style = if (priority == selectedPriority) {
+                            MaterialTheme.typography.h4
+                        } else {
+                            MaterialTheme.typography.h5
+                        },
+                    )
+                }
+            }
+        }
     }
 }
 
