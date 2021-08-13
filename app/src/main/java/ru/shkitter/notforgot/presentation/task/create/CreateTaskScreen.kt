@@ -28,6 +28,7 @@ import ru.shkitter.domain.task.model.Category
 import ru.shkitter.domain.task.model.Priority
 import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.R
+import ru.shkitter.notforgot.presentation.common.components.AppFilledButton
 import ru.shkitter.notforgot.presentation.common.components.AppFilledTextField
 import ru.shkitter.notforgot.presentation.common.components.BaseTopAppBar
 import ru.shkitter.notforgot.presentation.common.theme.*
@@ -159,6 +160,14 @@ private fun CreateTaskContent(
             selectedPriority = selectedPriority,
             onPrioritySelected = onPrioritySelected
         )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        AppFilledButton(
+            onClick = { /*TODO*/ },
+            text = stringResource(id = R.string.common_save),
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 

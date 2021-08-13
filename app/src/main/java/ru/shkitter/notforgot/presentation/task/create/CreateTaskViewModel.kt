@@ -17,10 +17,10 @@ class CreateTaskViewModel(
     private val getCreateTaskDataUseCase: GetCreateTaskDataUseCase
 ) : StateViewModel<Unit>() {
 
-    private val _title = MutableLiveData<String>()
+    private val _title = MutableLiveData(task?.title.orEmpty())
     val title = _title.asLiveData()
 
-    private val _description = MutableLiveData<String>()
+    private val _description = MutableLiveData(task?.description.orEmpty())
     val description = _description.asLiveData()
 
     private val _categories = MutableLiveData<List<Category>>()
@@ -29,13 +29,13 @@ class CreateTaskViewModel(
     private val _priorities = MutableLiveData<List<Priority>>()
     val priorities = _priorities.asLiveData()
 
-    private val _selectedCategory = MutableLiveData<Category?>()
+    private val _selectedCategory = MutableLiveData(task?.category)
     val selectedCategory = _selectedCategory.asLiveData()
 
-    private val _selectedPriority = MutableLiveData<Priority?>()
+    private val _selectedPriority = MutableLiveData(task?.priority)
     val selectedPriority = _selectedPriority.asLiveData()
 
-    private val _selectedDeadline = MutableLiveData<Instant?>()
+    private val _selectedDeadline = MutableLiveData(task?.deadline)
     val selectedDeadline = _selectedDeadline.asLiveData()
 
     init {

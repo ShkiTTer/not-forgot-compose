@@ -10,6 +10,7 @@
     <string name="common_password">Пароль</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_ok">OK</string>
+    <string name="common_save">Сохранить</string>
 
     <!-- Error -->
     <string name="error_empty">Заполните поле</string>
