@@ -3,6 +3,8 @@ package ru.shkitter.notforgot.presentation.main
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
+import androidx.navigation.Navigation
+import androidx.navigation.Navigator
 import androidx.navigation.compose.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -18,7 +20,7 @@ import ru.shkitter.notforgot.presentation.task.list.TaskListScreen
 
 @ExperimentalAnimationApi
 @Composable
-fun NotForgotApp() {
+fun AppRouter() {
     val navController = rememberAnimatedNavController()
 
     AnimatedNavHost(navController = navController, startDestination = Screen.Splash.route) {
@@ -79,6 +81,10 @@ fun NotForgotApp() {
                     }
                 },
                 onCreateTaskClick = {
+                    navController.currentBackStackEntry?.arguments?.putSerializable(
+                        Screen.TaskDetails.PARAM_TASK,
+                        null
+                    )
                     navController.navigate(Screen.CreateTask.route) {
                         popUpTo(Screen.TaskList.route)
                     }
