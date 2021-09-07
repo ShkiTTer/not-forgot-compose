@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdkVersion rootProject.ext.compileSdk
 
     defaultConfig {
         applicationId "ru.shkitter.notforgot"
@@ -68,7 +68,6 @@ dependencies {
     // Accompanist
     implementation "com.google.accompanist:accompanist-insets:0.16.1"
     implementation "com.google.accompanist:accompanist-swiperefresh:0.16.1"
-    implementation "com.google.accompanist:accompanist-navigation-animation:0.16.1"
 
     // Compose Dialog
     implementation "io.github.vanpra.compose-material-dialogs:datetime:0.5.1"

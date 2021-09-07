@@ -7,8 +7,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -16,26 +14,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.getViewModel
 import ru.shkitter.notforgot.R
+import ru.shkitter.notforgot.presentation.common.Screen
+import ru.shkitter.notforgot.presentation.common.navigation.navigate
 import ru.shkitter.notforgot.presentation.common.theme.BgBlackColor
 import ru.shkitter.notforgot.presentation.common.theme.TextWhiteColor
 
 @Preview(showBackground = true, showSystemUi = true, device = Devices.PIXEL_3)
 @Composable
 private fun DefaultSplashScreen() {
-    SplashScreen {}
+    SplashScreen(rememberNavController())
 }
 
 @Composable
-fun SplashScreen(onShown: (Boolean) -> Unit) {
+fun SplashScreen(navController: NavController) {
     val viewModel = getViewModel<SplashViewModel>()
-    val currentOnTimeout by rememberUpdatedState(onShown)
 
     LaunchedEffect(true) {
         delay(2000)
-        currentOnTimeout(viewModel.checkUserLogged())
+        navController.navigate(
+            screen = if (viewModel.checkUserLogged()) Screen.TaskList else Screen.Login
+        ) {
+            navController.popBackStack()
+        }
     }
 
     Surface(color = BgBlackColor) {

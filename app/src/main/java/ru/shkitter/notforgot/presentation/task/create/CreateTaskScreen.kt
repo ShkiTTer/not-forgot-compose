@@ -19,6 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
@@ -43,26 +45,12 @@ import java.time.ZoneId
 @Composable
 private fun DefaultCreateTaskScreen() {
     NotForgotTheme {
-        CreateTaskContent(
-            title = "",
-            onTitleChanged = {},
-            description = "",
-            onDescriptionChanged = {},
-            categories = listOf(),
-            selectedCategory = null,
-            onCategorySelect = {},
-            deadline = null,
-            onDeadLineSelectClick = {},
-            priorities = listOf(),
-            selectedPriority = null,
-            onPrioritySelected = {},
-            onSaveClick = {}
-        )
+        CreateTaskScreen(task = null, navController = rememberNavController())
     }
 }
 
 @Composable
-fun CreateTaskScreen(task: Task?, onBackClick: () -> Unit) {
+fun CreateTaskScreen(task: Task?, navController: NavController) {
     val scaffoldState = rememberScaffoldState()
     val viewModel = getViewModel<CreateTaskViewModel> {
         parametersOf(task)
@@ -85,7 +73,7 @@ fun CreateTaskScreen(task: Task?, onBackClick: () -> Unit) {
         topBar = {
             BaseTopAppBar(
                 title = stringResource(id = if (task != null) R.string.create_task_edit_title else R.string.create_task_title),
-                onBackClick = onBackClick
+                onBackClick = { navController.popBackStack() }
             )
         }) {
         ContentStateBox(
@@ -177,7 +165,7 @@ private fun CreateTaskContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         AppFilledButton(
-            onClick = { /*TODO*/ },
+            onClick = { onSaveClick.invoke() },
             text = stringResource(id = R.string.common_save),
             modifier = Modifier.fillMaxWidth()
         )

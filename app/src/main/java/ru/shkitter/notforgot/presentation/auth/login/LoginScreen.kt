@@ -23,32 +23,31 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import ru.shkitter.notforgot.R
 import ru.shkitter.notforgot.presentation.auth.login.model.LoginAction
+import ru.shkitter.notforgot.presentation.common.Screen
 import ru.shkitter.notforgot.presentation.common.components.AppFilledButton
 import ru.shkitter.notforgot.presentation.common.components.AppOutlinedTextField
 import ru.shkitter.notforgot.presentation.common.components.BaseTopAppBar
 import ru.shkitter.notforgot.presentation.common.components.ContentStateBox
+import ru.shkitter.notforgot.presentation.common.navigation.navigate
 import ru.shkitter.notforgot.presentation.common.theme.AccentBlueColor
 import ru.shkitter.notforgot.presentation.common.theme.BgMainColor
 
 @Preview(showSystemUi = true, showBackground = true, device = Devices.PIXEL_3)
 @Composable
 private fun DefaultLoginScreen() {
-    LoginScreen(
-        onRegistrationClick = {},
-        onSucceededLogin = {}
-    )
+    LoginScreen(rememberNavController())
 }
 
 @Composable
-fun LoginScreen(
-    onRegistrationClick: (String) -> Unit,
-    onSucceededLogin: () -> Unit
-) {
+fun LoginScreen(navController: NavController) {
     val viewModel = getViewModel<LoginViewModel>()
     val event by viewModel.event.observeAsState()
     val scaffoldState = rememberScaffoldState()
@@ -62,7 +61,9 @@ fun LoginScreen(
 
         event?.getContentIfNotHandled()?.let { action ->
             when (action) {
-                is LoginAction.Succeeded -> onSucceededLogin.invoke()
+                is LoginAction.Succeeded -> navController.navigate(Screen.TaskList) {
+                    popUpTo(Screen.Login.route) { inclusive = true }
+                }
                 is LoginAction.Error -> coroutineScope.launch {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = context.getString(R.string.common_something_went_wrong)
@@ -81,7 +82,12 @@ fun LoginScreen(
             content = {
                 LoginContent(
                     viewModel = viewModel,
-                    onRegistrationClick = onRegistrationClick
+                    onRegistrationClick = {
+                        navController.navigate(
+                            screen = Screen.Registration,
+                            params = bundleOf(Screen.Registration.PARAM_EMAIL to viewModel.email.value.orEmpty())
+                        )
+                    }
                 )
             })
     }

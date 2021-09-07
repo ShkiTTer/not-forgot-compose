@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdkVersion rootProject.ext.compileSdk
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdk

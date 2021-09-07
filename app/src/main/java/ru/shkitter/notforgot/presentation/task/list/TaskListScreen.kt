@@ -21,6 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -29,7 +32,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.koin.androidx.compose.getViewModel
 import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.R
+import ru.shkitter.notforgot.presentation.common.Screen
 import ru.shkitter.notforgot.presentation.common.components.*
+import ru.shkitter.notforgot.presentation.common.navigation.navigate
 import ru.shkitter.notforgot.presentation.common.theme.BgMainColor
 import ru.shkitter.notforgot.presentation.task.list.items.TaskListCategoryItem
 import ru.shkitter.notforgot.presentation.task.list.items.TaskListTaskItem
@@ -37,28 +42,39 @@ import ru.shkitter.notforgot.presentation.task.list.items.TaskListTaskItem
 @Preview(showBackground = true, showSystemUi = true, device = Devices.PIXEL_3)
 @Composable
 private fun DefaultTaskListScreen() {
-    TaskListScreen(onTaskClick = {}, onCreateTaskClick = {})
+    TaskListScreen(navController = rememberNavController())
 }
 
 @Composable
-fun TaskListScreen(onTaskClick: (Task) -> Unit, onCreateTaskClick: () -> Unit) {
+fun TaskListScreen(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-
     val viewModel = getViewModel<TaskListViewModel>()
 
     Scaffold(
         topBar = { BaseTopAppBar(title = stringResource(id = R.string.task_list_title)) },
         scaffoldState = scaffoldState,
         snackbarHost = { scaffoldState.snackbarHostState },
-        floatingActionButton = { AppIconFab(onClick = { onCreateTaskClick.invoke() }, icon = Icons.Filled.Add) },
+        floatingActionButton = {
+            AppIconFab(
+                onClick = { navController.navigate(Screen.CreateTask) },
+                icon = Icons.Filled.Add
+            )
+        },
         floatingActionButtonPosition = FabPosition.End
     ) { _ ->
 
         ContentStateBox(
             viewModel = viewModel,
-            content = { TaskListContent(viewModel, onTaskClick) },
+            content = {
+                TaskListContent(
+                    viewModel = viewModel,
+                    onTaskClick = { task ->
+                        navController.navigate(
+                            screen = Screen.TaskDetails,
+                            params = bundleOf(Screen.TaskDetails.PARAM_TASK to task)
+                        )
+                    })
+            },
             empty = { EmptyView(modifier = Modifier.fillMaxSize()) },
             snackbarHostState = scaffoldState.snackbarHostState,
             modifier = Modifier

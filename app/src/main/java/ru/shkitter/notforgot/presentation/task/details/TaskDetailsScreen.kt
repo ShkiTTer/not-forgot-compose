@@ -17,12 +17,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import ru.shkitter.domain.task.model.Category
 import ru.shkitter.domain.task.model.Priority
 import ru.shkitter.domain.task.model.Task
 import ru.shkitter.notforgot.R
+import ru.shkitter.notforgot.presentation.common.Screen
 import ru.shkitter.notforgot.presentation.common.components.BaseTopAppBar
 import ru.shkitter.notforgot.presentation.common.extensions.parse
+import ru.shkitter.notforgot.presentation.common.navigation.navigate
 import ru.shkitter.notforgot.presentation.common.theme.*
 import ru.shkitter.notforgot.presentation.common.utils.DateFormattingUtils
 import java.time.Instant
@@ -30,7 +35,7 @@ import java.time.Instant
 @Preview(showBackground = true, showSystemUi = true, device = Devices.PIXEL_3)
 @Composable
 private fun DefaultTaskDetailsScreen() {
-    MaterialTheme {
+    NotForgotTheme {
         TaskDetailsScreen(
             task = Task(
                 0,
@@ -43,14 +48,13 @@ private fun DefaultTaskDetailsScreen() {
                 Category(0, "Учеба"),
                 Priority(0, "Important", "#FFD130")
             ),
-            onBackClick = {},
-            onEditTask = {}
+            navController = rememberNavController()
         )
     }
 }
 
 @Composable
-fun TaskDetailsScreen(task: Task, onBackClick: () -> Unit, onEditTask: (Task) -> Unit) {
+fun TaskDetailsScreen(task: Task, navController: NavController) {
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
@@ -58,10 +62,17 @@ fun TaskDetailsScreen(task: Task, onBackClick: () -> Unit, onEditTask: (Task) ->
         topBar = {
             BaseTopAppBar(
                 title = stringResource(id = R.string.task_details_title),
-                onBackClick = { onBackClick.invoke() })
+                onBackClick = { navController.popBackStack() })
         }) { _ ->
 
-        TaskDetailsContent(task = task, onEditTask = onEditTask)
+        TaskDetailsContent(
+            task = task,
+            onEditTask = {
+                navController.navigate(
+                    screen = Screen.CreateTask,
+                    params = bundleOf(Screen.CreateTask.PARAM_TASK to task)
+                )
+            })
     }
 }
 

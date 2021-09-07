@@ -3,33 +3,31 @@ package ru.shkitter.notforgot.presentation.common
 sealed interface Screen {
     val route: String
 
-    object Splash: Screen {
+    object Splash : Screen {
         override val route: String = "splash"
     }
 
-    object Login: Screen {
+    object Login : Screen {
         override val route: String = "login"
     }
 
-    object Registration: Screen {
+    object Registration : Screen {
         const val PARAM_EMAIL = "email"
 
-        override val route: String = "registration?email={$PARAM_EMAIL}"
-
-        fun createRouteWithEmail(email: String) = "registration?email=$email"
+        override val route: String = "registration"
     }
 
-    object TaskList: Screen {
+    object TaskList : Screen {
         override val route: String = "task-list"
     }
 
-    object TaskDetails: Screen {
+    object TaskDetails : Screen {
         const val PARAM_TASK = "task"
 
         override val route: String = "task-details"
     }
 
-    object CreateTask: Screen {
+    object CreateTask : Screen {
         const val PARAM_TASK = "task"
 
         override val route: String = "create-task"
