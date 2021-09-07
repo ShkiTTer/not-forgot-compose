@@ -18,3 +18,5 @@ val AccentBlackColor = Color(0xFF292929)
 val AccentBlueColor = Color(0xFF1554F6)
 val SuccessColor = Color(0xFF69B76C)
 val ErrorColor = Color.Red
+
+val BlackAlpha60 = Color(0x99000000)

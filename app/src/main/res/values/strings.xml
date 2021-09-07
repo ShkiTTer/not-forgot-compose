@@ -8,7 +8,7 @@
     <string name="common_sign_in">Войти</string>
     <string name="common_email">Электронная почта</string>
     <string name="common_password">Пароль</string>
-    <string name="common_cancel">Cancel</string>
+    <string name="common_cancel">Отмена</string>
     <string name="common_ok">OK</string>
     <string name="common_save">Сохранить</string>
     <string name="common_counter">%d/%d</string>

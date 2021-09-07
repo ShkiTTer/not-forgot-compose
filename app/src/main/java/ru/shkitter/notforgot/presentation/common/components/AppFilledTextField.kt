@@ -3,14 +3,10 @@ package ru.shkitter.notforgot.presentation.common.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -77,7 +73,9 @@ fun AppFilledTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     maxLines: Int = Int.MAX_VALUE,
     maxLength: Int = Int.MAX_VALUE,
-    showCounter: Boolean = false
+    showCounter: Boolean = false,
+    leadingIcon: (@Composable () -> Unit)? = null,
+    trailingIcon: (@Composable () -> Unit)? = null
 ) {
     Column {
         TextField(
@@ -103,7 +101,9 @@ fun AppFilledTextField(
                 }
             },
             colors = colors,
-            maxLines = maxLines
+            maxLines = maxLines,
+            trailingIcon = trailingIcon,
+            leadingIcon = leadingIcon
         )
 
         when {
